@@ -22,7 +22,7 @@ export default function Header() {
                 <div className="container header-inner">
                     <Link href="/" className="logo" onClick={closeMobile}>
                         <Image
-                            src="/images/logo.png"
+                            src="/images/logo.PNG"
                             alt="Pizza Time"
                             width={44}
                             height={44}
@@ -66,7 +66,7 @@ export default function Header() {
             <aside className={`mobile-menu ${mobileOpen ? 'open' : ''}`}>
                 <div className="mobile-menu-header">
                     <Link href="/" className="logo" onClick={closeMobile}>
-                        <Image src="/images/logo.png" alt="Pizza Time" width={36} height={36} className="logo-img" />
+                        <Image src="/images/logo.PNG" alt="Pizza Time" width={36} height={36} className="logo-img" />
                         <span className="logo-text">Pizza<span>Time</span></span>
                     </Link>
                     <button className="mobile-close" onClick={closeMobile} aria-label="Закрыть">
