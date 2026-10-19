@@ -1,0 +1,269 @@
+/* src/components/Contacts/Contacts.css */
+.contacts {
+    padding: 60px 20px;
+}
+
+.contacts-header {
+    margin-bottom: 32px;
+}
+
+.contacts-header h2 {
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 6px;
+}
+
+.contacts-header p {
+    color: #777;
+    font-size: 16px;
+}
+
+.contacts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 24px;
+    align-items: stretch;
+}
+
+/* ====== Информация ====== */
+.contacts-info {
+    background: var(--black);
+    color: white;
+    border-radius: 24px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    position: relative;
+    overflow: hidden;
+}
+
+.contacts-info::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    right: -20%;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(200, 16, 46, 0.45) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.contact-row {
+    display: flex;
+    gap: 14px;
+    position: relative;
+    z-index: 1;
+}
+
+.contact-icon {
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--yellow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.contact-row h4 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.55;
+    margin-bottom: 4px;
+    font-weight: 600;
+}
+
+.contact-row p,
+.contact-row a {
+    font-size: 16px;
+    color: white;
+    transition: color 0.2s ease;
+}
+
+.contact-row a {
+    display: block;
+    font-weight: 700;
+    color: var(--yellow);
+    margin-top: 2px;
+}
+
+.contact-row a:hover {
+    color: white;
+}
+
+/* Соцсети */
+.contact-socials {
+    display: flex;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+    margin-top: auto;
+}
+
+.social-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.social-btn:hover {
+    transform: translateY(-2px);
+}
+
+.social-btn.instagram:hover {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.social-btn.telegram:hover {
+    background: #2aabee;
+}
+
+/* Кнопки действий */
+.contact-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-primary,
+.btn-secondary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.btn-primary {
+    background: var(--red);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #a00d25;
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+/* ====== Карта ====== */
+.contacts-map {
+    border-radius: 24px;
+    overflow: hidden;
+    min-height: 420px;
+    background: #f0f0f0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.contacts-map iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+}
+
+/* ====== Адаптив ====== */
+@media (max-width: 1024px) {
+    .contacts-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contacts-map {
+        min-height: 360px;
+    }
+}
+
+@media (max-width: 768px) {
+    .contacts {
+        padding: 40px 16px;
+    }
+
+    .contacts-header h2 {
+        font-size: 28px;
+    }
+
+    .contacts-header p {
+        font-size: 14px;
+    }
+
+    .contacts-info {
+        padding: 24px;
+        border-radius: 20px;
+        gap: 18px;
+    }
+
+    .contact-icon {
+        width: 38px;
+        height: 38px;
+        font-size: 14px;
+    }
+
+    .contact-row h4 {
+        font-size: 12px;
+    }
+
+    .contact-row p,
+    .contact-row a {
+        font-size: 15px;
+    }
+
+    .contacts-map {
+        min-height: 280px;
+        border-radius: 20px;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+        padding: 13px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .contacts-info {
+        padding: 20px;
+    }
+
+    .contact-socials {
+        flex-direction: column;
+    }
+
+    .social-btn {
+        padding: 12px;
+    }
+
+    .contacts-map {
+        min-height: 240px;
+    }
+
+    .contact-row a {
+        font-size: 15px;
+    }
+}

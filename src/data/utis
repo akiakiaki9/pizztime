@@ -1,0 +1,501 @@
+
+export const menu = [
+  {
+    category: "Холодные роллы",
+    items: [
+      {
+        name: "Сливочный кунсей",
+        description: "Сыр сливочный, копчёный лосось, огурец, масаго",
+        variants: [
+          { pieces: 4, weight: 118, price: 27500 },
+          { pieces: 8, weight: 236, price: 55000 },
+        ],
+      },
+      {
+        name: "Сливочный сальмон",
+        description: "Лосось, сыр сливочный, салат айсберг",
+        variants: [
+          { pieces: 4, weight: 113, price: 30000 },
+          { pieces: 8, weight: 226, price: 60000 },
+        ],
+      },
+      {
+        name: "Филадельфия классик",
+        description: "Лосось, сыр сливочный, огурец",
+        variants: [
+          { pieces: 4, weight: 135, price: 35000 },
+          { pieces: 8, weight: 270, price: 70000 },
+        ],
+      },
+      {
+        name: "Филадельфия лайт",
+        description: "Сыр сливочный, лосось",
+        variants: [
+          { pieces: 4, weight: 135, price: 35000 },
+          { pieces: 8, weight: 270, price: 70000 },
+        ],
+      },
+      {
+        name: "Филадельфия с угрем",
+        description: "Лосось, сыр сливочный, угорь, огурец",
+        variants: [
+          { pieces: 4, weight: 140, price: 42500 },
+          { pieces: 8, weight: 280, price: 85000 },
+        ],
+      },
+      {
+        name: "Грин с копчёным лососем",
+        description: "Лосось копчёный, сыр сливочный, огурец, укроп",
+        variants: [
+          { pieces: 4, weight: 110, price: 35000 },
+          { pieces: 8, weight: 220, price: 70000 },
+        ],
+      },
+      {
+        name: "Калифорния с лососем",
+        description: "Лосось, масаго, сыр, огурец, майонез",
+        variants: [
+          { pieces: 4, weight: 130, price: 35000 },
+          { pieces: 8, weight: 260, price: 70000 },
+        ],
+      },
+      {
+        name: "Сливочный угорь",
+        description: "Сыр сливочный, угорь, огурец, масаго, унаги соус, кунжут",
+        variants: [
+          { pieces: 4, weight: 121, price: 32500 },
+          { pieces: 8, weight: 242, price: 75000 },
+        ],
+      },
+      {
+        name: "Дракон де люкс",
+        description: "Угорь, сыр сливочный, снежный краб, унаги соус, кунжут",
+        variants: [
+          { pieces: 4, weight: 131, price: 40000 },
+          { pieces: 8, weight: 262, price: 80000 },
+        ],
+      },
+      {
+        name: "Дракон",
+        description: "Сыр сливочный, угорь, огурец, унаги соус, кунжут",
+        variants: [
+          { pieces: 4, weight: 133, price: 35000 },
+          { pieces: 8, weight: 266, price: 70000 },
+        ],
+      },
+      {
+        name: "Канада",
+        description: "Угорь, сыр сливочный, лосось, огурец, унаги соус, кунжут",
+        variants: [
+          { pieces: 4, weight: 140, price: 32500 },
+          { pieces: 8, weight: 280, price: 75000 },
+        ],
+      },
+      {
+        name: "Аляска",
+        description: "Лосось, угорь, сыр сливочный, огурец, кунжут",
+        variants: [
+          { pieces: 4, weight: 117, price: 40000 },
+          { pieces: 8, weight: 234, price: 80000 },
+        ],
+      },
+      {
+        name: "Окинава",
+        description: "Снежный краб, сыр сливочный, масаго, огурец",
+        variants: [
+          { pieces: 4, weight: 117, price: 30000 },
+          { pieces: 8, weight: 235, price: 60000 },
+        ],
+      },
+      {
+        name: "Калифорния с оранжем",
+        description: "Снежный краб, сыр, огурец",
+        variants: [
+          { pieces: 4, weight: 130, price: 30000 },
+          { pieces: 8, weight: 260, price: 60000 },
+        ],
+      },
+      {
+        name: "Сливочный тунец",
+        description: "Сыр сливочный, тунец, салат айсберг, масаго",
+        variants: [
+          { pieces: 4, weight: 118, price: 40000 },
+          { pieces: 8, weight: 236, price: 80000 },
+        ],
+      },
+      {
+        name: "Филадельфия с тунцом",
+        description: "Тунец, сыр сливочный, огурец",
+        variants: [
+          { pieces: 4, weight: 125, price: 50000 },
+          { pieces: 8, weight: 250, price: 100000 },
+        ],
+      },
+      {
+        name: "Осака",
+        description: "Сыр сливочный, лосось, тунец, масаго, огурец, кунжут",
+        variants: [
+          { pieces: 4, weight: 133, price: 40000 },
+          { pieces: 8, weight: 266, price: 80000 },
+        ],
+      },
+      {
+        name: "Грин с курицей",
+        description: "Курица, копчёная курица, огурец, укроп",
+        variants: [
+          { pieces: 4, weight: 110, price: 25000 },
+          { pieces: 8, weight: 220, price: 50000 },
+        ],
+      },
+      {
+        name: "Белые ночи",
+        description: "Сыр сливочный, курица, огурец, унаги соус, кунжут",
+        variants: [
+          { pieces: 4, weight: 117, price: 32500 },
+          { pieces: 8, weight: 235, price: 65000 },
+        ],
+      },
+      {
+        name: "Тори чиз",
+        description: "Курица, сыр сливочный, унаги соус, огурец, кунжут",
+        variants: [
+          { pieces: 4, weight: 117, price: 27500 },
+          { pieces: 8, weight: 235, price: 55000 },
+        ],
+      },
+      {
+        name: "Южный",
+        description: "Масаго, сыр сливочный, огурец, курица",
+        variants: [
+          { pieces: 4, weight: 130, price: 32500 },
+          { pieces: 8, weight: 260, price: 75000 },
+        ],
+      },
+      {
+        name: "Ролл Цезарь",
+        description: "Курица, помидор, соус Цезарь, сыр моцарелла, салат айсберг",
+        variants: [
+          { pieces: 4, weight: 120, price: 35000 },
+          { pieces: 8, weight: 240, price: 70000 },
+        ],
+      },
+      {
+        name: "Сливочная креветка",
+        description: "Сыр сливочный, креветка, огурец, масаго",
+        variants: [
+          { pieces: 4, weight: 118, price: 32500 },
+          { pieces: 8, weight: 236, price: 65000 },
+        ],
+      },
+      {
+        name: "Калифорния с креветкой",
+        description: "Креветка, масаго, сыр сливочный, огурец, майонез",
+        variants: [
+          { pieces: 4, weight: 130, price: 35000 },
+          { pieces: 8, weight: 260, price: 70000 },
+        ],
+      },
+    ],
+  },
+
+  {
+    category: "Запечённые роллы",
+    items: [
+      {
+        name: "Динамит с лососем",
+        description: "Лосось, омлет, соус сырный, сыр сливочный, огурец",
+        variants: [
+          { pieces: 4, weight: 138, price: 27500 },
+          { pieces: 8, weight: 276, price: 55000 },
+        ],
+      },
+      {
+        name: "Динамит спайси с лососем",
+        description: "Лосось, омлет, спайси соус, сыр сливочный, кунжут",
+        variants: [
+          { pieces: 4, weight: 129, price: 30000 },
+          { pieces: 8, weight: 258, price: 60000 },
+        ],
+      },
+      {
+        name: "Динамит с угрем",
+        description: "Угорь, омлет, сырный соус, огурец, сыр сливочный, кунжут",
+        variants: [
+          { pieces: 4, weight: 145, price: 30000 },
+          { pieces: 8, weight: 290, price: 60000 },
+        ],
+      },
+      {
+        name: "Динамит с омлетом",
+        description: "Омлет, сыр сливочный, огурец, сырный соус, кунжут",
+        variants: [
+          { pieces: 4, weight: 145, price: 30000 },
+          { pieces: 8, weight: 290, price: 60000 },
+        ],
+      },
+      {
+        name: "Динамит со спайси-крабом",
+        description: "Снежный краб, масаго, омлет, огурец, спайси соус, сырный соус, кунжут",
+        variants: [
+          { pieces: 4, weight: 135, price: 26000 },
+          { pieces: 8, weight: 288, price: 52000 },
+        ],
+      },
+      {
+        name: "Динамит с крабом",
+        description: "Снежный краб, омлет, соус сырный, сыр сливочный, огурец, масаго",
+        variants: [
+          { pieces: 4, weight: 135, price: 27500 },
+          { pieces: 8, weight: 270, price: 50000 },
+        ],
+      },
+      {
+        name: "Динамит спайси с курицей",
+        description: "Курица, омлет, спайси соус, сыр сливочный, огурец, кунжут",
+        variants: [
+          { pieces: 4, weight: 145, price: 25000 },
+          { pieces: 8, weight: 274, price: 50000 },
+        ],
+      },
+      {
+        name: "Динамит с курицей",
+        description: "Курица, омлет, спайси соус, сыр сливочный, огурец, кунжут",
+        variants: [
+          { pieces: 4, weight: 145, price: 25000 },
+          { pieces: 8, weight: 290, price: 50000 },
+        ],
+      },
+      {
+        name: "Южный запечённый",
+        description: "Курица, масаго, соус сырный, сыр сливочный, огурец",
+        variants: [
+          { pieces: 4, weight: 127, price: 27500 },
+          { pieces: 8, weight: 254, price: 55000 },
+        ],
+      },
+      {
+        name: "Миланский запечённый",
+        description: "Курица, сыр моцарелла, сыр сливочный, соус Цезарь, кунжут",
+        variants: [
+          { pieces: 4, weight: 115, price: 30000 },
+          { pieces: 8, weight: 230, price: 60000 },
+        ],
+      },
+      {
+        name: "Калифорния хот",
+        description: "Снежный краб, масаго, сыр сливочный, огурец",
+        variants: [
+          { pieces: 4, weight: 142, price: 27500 },
+          { pieces: 8, weight: 284, price: 55000 },
+        ],
+      },
+    ],
+  },
+
+  {
+    category: "Горячие роллы",
+    items: [
+      {
+        name: "Темпура лосось",
+        description: "Лосось, сыр сливочный, огурец, кляр, сухари панировочные",
+        variants: [
+          { pieces: 4, weight: 130, price: 27500 },
+          { pieces: 8, weight: 260, price: 55000 },
+        ],
+      },
+      {
+        name: "Темпура с угрем",
+        description: "Угорь, сыр сливочный, огурец, кляр, сухари панировочные",
+        variants: [
+          { pieces: 4, weight: 130, price: 37500 },
+          { pieces: 8, weight: 260, price: 75000 },
+        ],
+      },
+      {
+        name: "Темпура с крабом",
+        description: "Снежный краб, сыр сливочный, огурец, кляр, сухари панировочные, масаго",
+        variants: [
+          { pieces: 4, weight: 133, price: 25000 },
+          { pieces: 8, weight: 266, price: 50000 },
+        ],
+      },
+      {
+        name: "Темпура с креветкой",
+        description: "Креветка, сыр сливочный, огурец, кляр, сухари панировочные, масаго",
+        variants: [
+          { pieces: 4, weight: 133, price: 30000 },
+          { pieces: 8, weight: 266, price: 60000 },
+        ],
+      },
+      {
+        name: "Темпура с курицей",
+        description: "Курица, сыр сливочный, огурец, кляр, сухари панировочные",
+        variants: [
+          { pieces: 4, weight: 130, price: 27500 },
+          { pieces: 8, weight: 260, price: 55000 },
+        ],
+      },
+    ],
+  },
+
+  {
+    category: "Суши и сэндвичи",
+    items: [
+      { name: "Суши с лососем", description: "", price: null },
+      { name: "Суши с креветкой", description: "", price: null },
+      { name: "Суши с угрём", description: "", price: null },
+      { name: "Сэндвич с лососем", description: "", price: null },
+      { name: "Сэндвич с омлетом и чуккой", description: "", price: null },
+      { name: "Сэндвич с курицей", description: "", price: null },
+      { name: "Сэндвич с угрём", description: "", price: null },
+    ],
+  },
+
+  {
+    category: "Удон",
+    items: [
+      { name: "Удон с овощами", description: "Соус на выбор", price: null },
+      { name: "Удон с креветками", description: "Соус на выбор", price: null },
+      { name: "Удон с курицей", description: "Соус на выбор", price: null },
+      { name: "Удон с говядиной", description: "Соус на выбор", price: null },
+    ],
+  },
+
+  {
+    category: "Обжаренный рис",
+    items: [
+      { name: "Рис обжаренный с овощами", description: "", price: null },
+      { name: "Рис обжаренный с курицей", description: "", price: null },
+      { name: "Рис обжаренный с креветками", description: "", price: null },
+      { name: "Рис обжаренный с говядиной", description: "", price: null },
+    ],
+  },
+
+  {
+    category: "Онигири",
+    items: [
+      { name: "Онигири с крабом", description: "", price: null },
+      { name: "Онигири с лососем", description: "", price: null },
+      { name: "Онигири с креветкой", description: "", price: null },
+      { name: "Онигири с курицей", description: "", price: null },
+    ],
+  },
+
+  {
+    category: "Закуски",
+    items: [
+      { name: "Картофель по-деревенски", description: "", price: null },
+      { name: "Картофель фри", description: "", price: null },
+      {
+        name: "Креветки темпура",
+        description: "",
+        variants: [
+          { pieces: 3, price: null },
+          { pieces: 5, price: null },
+        ],
+      },
+    ],
+  },
+
+  {
+    category: "Сеты",
+    items: [
+      {
+        name: "Сет Квартет Хот",
+        description: "Динамит лосось, динамит краб, динамит креветка, динамит с курицей",
+        weight: 1156,
+        pieces: 32,
+        price: null,
+      },
+      {
+        name: "Темпура четыре звезды",
+        description: "Темпура с крабом, темпура лосось, темпура креветка, темпура с курицей",
+        weight: 1780,
+        pieces: 32,
+        price: null,
+      },
+      {
+        name: "Сет темпура квартет",
+        description: "Темпура курица, темпура лосось, темпура с угрём, темпура креветки",
+        weight: 1052,
+        pieces: 32,
+        price: null,
+      },
+      {
+        name: "Сет Ням-Ням",
+        description: "Калифорния оранж, Филадельфия лайт, динамит с лососем, динамит с крабом",
+        weight: 1090,
+        pieces: 32,
+        price: null,
+      },
+      {
+        name: "Сет Студенческий",
+        description: "Калифорния оранж, Филадельфия классик, Дракон, Тори чиз",
+        weight: 510,
+        pieces: 16,
+        price: null,
+      },
+      {
+        name: "Пять звёзд запечённый",
+        description: "Динамит лосось, динамит краб, динамит креветка, динамит с курицей, динамит с омлетом",
+        weight: 1438,
+        pieces: 40,
+        price: null,
+      },
+      {
+        name: "Сет Хот мини",
+        description: "Динамит лосось, динамит краб, динамит курица",
+        weight: 866,
+        pieces: 24,
+        price: null,
+      },
+      {
+        name: "Сет ТРИО Темпура",
+        description: "Темпура курица, темпура лосось, темпура с креветкой",
+        weight: 786,
+        pieces: 24,
+        price: null,
+      },
+      {
+        name: "Сет Мега",
+        description: "Калифорния оранж, калифорния с лососем, южный, сливочный с лососем, динамит с лососем, динамит с курицей, динамит с омлетом, динамит с крабом",
+        weight: 2157,
+        pieces: 64,
+        price: null,
+      },
+      {
+        name: "Сет Спринг",
+        description: "Калифорния оранж, Филадельфия классик, Грин с курицей",
+        weight: 780,
+        pieces: 24,
+        price: null,
+      },
+      {
+        name: "Сет Флеш",
+        description: "Филадельфия лайт, тори чиз, южный запечённый, динамит с лососем",
+        weight: 1355,
+        pieces: 40,
+        price: null,
+      },
+      {
+        name: "Сет Кансин",
+        description: "Сливочный кунсей, окинава, белые ночи",
+        weight: 594,
+        pieces: 24,
+        price: null,
+      },
+    ],
+  },
+
+  {
+    category: "Соусы и салаты",
+    items: [
+      { name: "Соевый соус", weight: 40, price: null },
+      { name: "Васаби", weight: 10, price: null },
+      { name: "Имбирь", weight: 40, price: null },
+      { name: "Спайси соус", weight: 40, price: null },
+      { name: "Сырный соус", weight: 40, price: null },
+      { name: "Салат чукка", weight: 140, price: null },
+    ],
+  },
+];

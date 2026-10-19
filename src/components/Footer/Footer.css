@@ -1,0 +1,232 @@
+/* src/components/Footer/Footer.css */
+.footer {
+    background: var(--black);
+    color: white;
+    padding: 64px 0 0;
+    margin-top: 60px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Декоративное свечение сверху */
+.footer::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 240px;
+    background: radial-gradient(ellipse at center,
+            rgba(200, 16, 46, 0.25) 0%,
+            transparent 70%);
+    pointer-events: none;
+}
+
+/* ====== Сетка ====== */
+.footer-inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+    position: relative;
+    z-index: 1;
+}
+
+.footer-col h4 {
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--yellow);
+    margin-bottom: 18px;
+}
+
+/* ====== Бренд ====== */
+.footer-brand {
+    max-width: 340px;
+}
+
+.footer-logo {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+}
+
+.footer-logo span {
+    color: var(--red);
+}
+
+.footer-tagline {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.footer-info {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-info li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.footer-info li svg {
+    color: var(--yellow);
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+/* ====== Ссылки ====== */
+.footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.footer-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.75);
+    transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.footer-links a:hover {
+    color: var(--yellow);
+    transform: translateX(4px);
+}
+
+.footer-phones a svg {
+    font-size: 12px;
+    color: var(--yellow);
+}
+
+/* ====== Соцсети ====== */
+.footer-social {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.social-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.07);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.social-icon:hover {
+    transform: translateY(-3px);
+}
+
+.social-icon.instagram:hover {
+    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+}
+
+.social-icon.telegram:hover {
+    background: #2aabee;
+}
+
+/* ====== Нижняя панель ====== */
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 22px 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.45);
+    position: relative;
+    z-index: 1;
+}
+
+.footer-dev a {
+    color: var(--yellow);
+    font-weight: 700;
+    transition: color 0.25s ease;
+}
+
+.footer-dev a:hover {
+    color: white;
+    text-decoration: underline;
+}
+
+/* ====== Адаптив ====== */
+@media (max-width: 900px) {
+    .footer-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 36px;
+    }
+
+    .footer-brand {
+        grid-column: 1 / -1;
+        max-width: none;
+    }
+}
+
+@media (max-width: 640px) {
+    .footer {
+        padding-top: 48px;
+        margin-top: 40px;
+    }
+
+    .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        padding-bottom: 32px;
+    }
+
+    .footer-logo {
+        font-size: 26px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px 16px;
+        font-size: 12px;
+    }
+
+    .footer-social {
+        margin-top: 14px;
+    }
+
+    .social-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 17px;
+    }
+}
+
+@media (max-width: 380px) {
+    .footer-inner {
+        gap: 26px;
+    }
+
+    .footer-links a {
+        font-size: 14px;
+    }
+
+    .footer-info li {
+        font-size: 13px;
+    }
+}

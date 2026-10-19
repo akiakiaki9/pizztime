@@ -1,69 +1,82 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+// src/app/page.jsx
+'use client';
+import { useState, useRef } from 'react';
+import Header from '@/components/Header/Header';
+import Carousel from '@/components/Carousel/Carousel';
+import Footer from '@/components/Footer/Footer';
+import MenuItem from '@/components/MenuItem/MenuItem';
+import Modal from '@/components/Modal/Modal';
+import Contacts from '@/components/Contacts/Contacts';
+import { allMenu, allCategories } from '@/data';
+import { addToCart } from '@/lib/cart';
+import './page.css';
 
 export default function Home() {
+  const [selected, setSelected] = useState(null);
+  const [activeCat, setActiveCat] = useState('Все');
+  const menuSectionRef = useRef(null);
+
+  const handleAdd = (product) => {
+    addToCart(product);
+    window.dispatchEvent(new Event('cartUpdated'));
+  };
+
+  const filtered =
+    activeCat === 'Все'
+      ? allMenu
+      : allMenu.filter((i) => i.category === activeCat);
+
+  const handleCategoryClick = (cat) => {
+    setActiveCat(cat);
+    requestAnimationFrame(() => {
+      if (!menuSectionRef.current) return;
+      const top =
+        menuSectionRef.current.getBoundingClientRect().top +
+        window.scrollY;
+      window.scrollTo({ top, behavior: 'smooth' });
+    });
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.js</code> file.
-          </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
+    <>
+      <Header />
+      <Carousel />
+
+      <div className="cat-bar">
+        <div className="cat-scroll">
+          {allCategories.map((cat) => (
+            <button
+              key={cat}
+              className={`cat-chip ${activeCat === cat ? 'active' : ''}`}
+              onClick={() => handleCategoryClick(cat)}
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+              {cat}
+            </button>
+          ))}
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
+      </div>
+
+      <section ref={menuSectionRef} className="menu-section container" id="menu">
+        <div className="menu-header">
+          <h2>Меню</h2>
+          <span className="menu-count">
+            {filtered.length} {filtered.length === 1 ? 'блюдо' : 'блюд'}
+          </span>
+        </div>
+        <div className="menu-grid">
+          {filtered.map((item) => (
+            <MenuItem
+              key={`${item.source}-${item.id}`}
+              item={item}
+              onClick={setSelected}
             />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          ))}
         </div>
-      </main>
-    </div>
+      </section>
+
+      <Contacts />
+      <Footer />
+      <Modal item={selected} onClose={() => setSelected(null)} onAdd={handleAdd} />
+    </>
   );
 }
