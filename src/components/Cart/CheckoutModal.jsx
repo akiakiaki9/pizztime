@@ -1,12 +1,14 @@
 // src/components/Cart/CheckoutModal.jsx
 'use client';
 import { useState } from 'react';
-import { FaTimes, FaTelegram, FaCheckCircle } from 'react-icons/fa';
+import { FaTimes, FaTelegram, FaCheckCircle, FaMapMarkerAlt } from 'react-icons/fa';
 import { clearCart } from '@/lib/cart';
 import './CheckoutModal.css';
 
 export default function CheckoutModal({ open, items, total, onClose, onSuccess }) {
     const [form, setForm] = useState({ name: '', phone: '', address: '', comment: '' });
+    const [coords, setCoords] = useState(null); // { lat, lng }
+    const [locating, setLocating] = useState(false);
     const [sending, setSending] = useState(false);
     const [sent, setSent] = useState(false);
     const [error, setError] = useState('');
@@ -18,10 +20,36 @@ export default function CheckoutModal({ open, items, total, onClose, onSuccess }
         setError('');
     };
 
+    const detectLocation = () => {
+        if (!navigator.geolocation) {
+            setError('Геолокация не поддерживается вашим браузером');
+            return;
+        }
+        setLocating(true);
+        setError('');
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const { latitude, longitude } = position.coords;
+                setCoords({ lat: latitude, lng: longitude });
+                setLocating(false);
+            },
+            (err) => {
+                setLocating(false);
+                if (err.code === 1) {
+                    setError('Доступ к геолокации запрещён. Введите адрес вручную.');
+                } else {
+                    setError('Не удалось определить местоположение. Введите адрес вручную.');
+                }
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+        );
+    };
+
     const validate = () => {
         if (!form.name.trim()) return 'Введите имя';
         if (!form.phone.trim() || form.phone.replace(/\D/g, '').length < 9) return 'Введите корректный телефон';
-        if (!form.address.trim()) return 'Введите адрес доставки';
+        if (!form.address.trim() && !coords) return 'Введите адрес или отметьте местоположение';
         return null;
     };
 
@@ -35,8 +63,14 @@ export default function CheckoutModal({ open, items, total, onClose, onSuccess }
             const res = await fetch('/api/order', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ items, total, customer: form }),
+                body: JSON.stringify({
+                    items,
+                    total,
+                    customer: form,
+                    coords, // ← координаты клиента
+                }),
             });
+
             if (res.ok) {
                 clearCart();
                 window.dispatchEvent(new Event('cartUpdated'));
@@ -44,6 +78,7 @@ export default function CheckoutModal({ open, items, total, onClose, onSuccess }
                 setTimeout(() => {
                     setSent(false);
                     setForm({ name: '', phone: '', address: '', comment: '' });
+                    setCoords(null);
                     onSuccess();
                 }, 2500);
             } else {
@@ -60,6 +95,7 @@ export default function CheckoutModal({ open, items, total, onClose, onSuccess }
         <div className="checkout-overlay" onClick={onClose}>
             <div className="checkout-modal" onClick={(e) => e.stopPropagation()}>
                 <button className="checkout-close" onClick={onClose}><FaTimes /></button>
+
                 {sent ? (
                     <div className="checkout-success">
                         <FaCheckCircle className="success-icon" />
@@ -72,20 +108,54 @@ export default function CheckoutModal({ open, items, total, onClose, onSuccess }
                         <p className="checkout-subtitle">
                             {items.reduce((s, i) => s + i.qty, 0)} поз. на сумму {total.toLocaleString()} сум
                         </p>
+
                         <form onSubmit={handleSubmit} className="checkout-form">
                             <label>Имя*
                                 <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Как к вам обращаться" />
                             </label>
+
                             <label>Телефон*
                                 <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+998 __ ___ __ __" />
                             </label>
+
                             <label>Адрес доставки*
-                                <input type="text" name="address" value={form.address} onChange={handleChange} placeholder="Улица, дом, квартира" />
+                                <div className="address-row">
+                                    <input
+                                        type="text"
+                                        name="address"
+                                        value={form.address}
+                                        onChange={handleChange}
+                                        placeholder="Улица, дом, квартира"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={detectLocation}
+                                        disabled={locating}
+                                        className={`detect-btn ${coords ? 'active' : ''}`}
+                                        title="Определить моё местоположение"
+                                    >
+                                        <FaMapMarkerAlt />
+                                    </button>
+                                </div>
+                                {coords && (
+                                    <span className="coords-hint">
+                                        ✓ Координаты: {coords.lat.toFixed(5)}, {coords.lng.toFixed(5)}
+                                    </span>
+                                )}
                             </label>
+
                             <label>Комментарий
-                                <textarea name="comment" value={form.comment} onChange={handleChange} placeholder="Например: без лука" rows={3} />
+                                <textarea
+                                    name="comment"
+                                    value={form.comment}
+                                    onChange={handleChange}
+                                    placeholder="Например: без лука, позвонить за 5 минут"
+                                    rows={3}
+                                />
                             </label>
+
                             {error && <div className="checkout-error">{error}</div>}
+
                             <button type="submit" className="checkout-submit" disabled={sending}>
                                 <FaTelegram /> {sending ? 'Отправка...' : 'Отправить заказ в Telegram'}
                             </button>
