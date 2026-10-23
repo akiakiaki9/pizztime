@@ -26,15 +26,27 @@ export default function Modal({ item, onClose, onAdd }) {
   const priceAvailable = hasVariants && variant?.price != null;
   const src = imgError ? PLACEHOLDER : item.image || PLACEHOLDER;
 
+  // Функция для формирования подписи (0.5 л, 25 см, 8 шт, 118 г)
+  const getVariantLabel = (v) => {
+    if (v.label) return v.label;
+    if (v.size) return `${v.size} см`;
+    if (v.pieces) return `${v.pieces} шт`;
+    if (v.grams) return `${v.grams} г`;
+    return '';
+  };
+
   const handleAdd = () => {
     if (!priceAvailable) return;
+    
+    const label = getVariantLabel(variant);
+    
     onAdd({
-      id: `${item.source}-${item.id}-${variant.pieces ?? 'x'}-${variant.grams ?? 'x'}`,
+      id: `${item.source}-${item.id}-${variant.size ?? 'x'}-${variant.pieces ?? 'x'}-${variant.grams ?? 'x'}-${variant.label ?? 'x'}`,
       productId: item.id,
       source: item.source,
-      name: `${item.name}${variant.pieces ? ` (${variant.pieces} шт)` : ''}${variant.grams ? ` ${variant.grams} г` : ''}`,
+      name: label ? `${item.name} (${label})` : item.name,
       price: variant.price,
-      image: src, // сохраняем итоговый путь (в т.ч. placeholder)
+      image: src,
     });
     onClose();
   };
@@ -71,7 +83,7 @@ export default function Modal({ item, onClose, onAdd }) {
                 onClick={() => setVariantIndex(i)}
               >
                 <span className="variant-pieces">
-                  {v.pieces ? `${v.pieces} шт` : v.grams ? `${v.grams} г` : '—'}
+                  {getVariantLabel(v) || '—'}
                 </span>
                 <span className="variant-price">
                   {v.price != null ? `${v.price.toLocaleString()} сум` : 'уточнить'}

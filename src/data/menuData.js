@@ -101,8 +101,7 @@ export const pizzaMenu = [
     id: 109,
     category: 'Пиццы',
     name: 'Pizza Президент',
-    composition:
-      '3 вида сыра, Президент, сырный соус, мясо гов, ветчина, соль, огурцы, помидоры, зелень',
+    composition: '3 вида сыра, Президент, сырный соус, мясо гов, ветчина, соль, огурцы, помидоры, зелень',
     image: '/images/fast-food/109.PNG',
     variants: [
       { size: 30, price: 115000 },
@@ -124,8 +123,7 @@ export const pizzaMenu = [
     id: 111,
     category: 'Пиццы',
     name: 'Мясной Комби',
-    composition:
-      'Сыр, соус, мясо говяжий и барбекю, мясо говяжий, помидор, маслины, шампиньоны',
+    composition: 'Сыр, соус, мясо говяжий и барбекю, мясо говяжий, помидор, маслины, шампиньоны',
     image: '/images/fast-food/111.PNG',
     variants: [
       { size: 30, price: 110000 },
@@ -136,8 +134,7 @@ export const pizzaMenu = [
     id: 112,
     category: 'Пиццы',
     name: 'Pizza Time (новинка)',
-    composition:
-      'Сыр, соус, колбаса чедр, болгарский перец, помидоры, шампиньоны, маслины, зелень',
+    composition: 'Сыр, соус, колбаса чедр, болгарский перец, помидоры, шампиньоны, маслины, зелень',
     image: '/images/fast-food/112.PNG',
     variants: [
       { size: 30, price: 130000 },
@@ -159,8 +156,7 @@ export const pizzaMenu = [
     id: 114,
     category: 'Пиццы',
     name: '4 Сезона',
-    composition:
-      'Сыр, соус, мясо говяжий, пепперони колбаса, шампиньоны, помидоры',
+    composition: 'Сыр, соус, мясо говяжий, пепперони колбаса, шампиньоны, помидоры',
     image: '/images/fast-food/114.PNG',
     variants: [
       { size: 30, price: 120000 },
@@ -240,5 +236,141 @@ export const pizzaMenu = [
     composition: 'Арабский кабоб',
     image: '/images/fast-food/601.PNG',
     variants: [{ price: 32000 }, { price: 38000 }],
+  },
+
+  // ====================== НАПИТКИ ======================
+  {
+    id: 701,
+    category: 'Напитки',
+    name: 'Кола',
+    composition: 'Классическая кола',
+    image: '/images/fast-food/701.PNG',
+    variants: [
+      { label: '0.5 л', price: 9000 },
+      { label: '1 л', price: 14000 },
+      { label: '1.5 л', price: 17000 },
+      { label: '2 л', price: 22000 },
+    ],
+  },
+  {
+    id: 702,
+    category: 'Напитки',
+    name: 'Фанта',
+    composition: 'Апельсиновая газировка',
+    image: '/images/fast-food/702.PNG',
+    variants: [
+      { label: '0.5 л', price: 9000 },
+      { label: '1 л', price: 14000 },
+      { label: '1.5 л', price: 17000 },
+      { label: '2 л', price: 22000 },
+    ],
+  },
+  {
+    id: 703,
+    category: 'Напитки',
+    name: 'Спрайт',
+    composition: 'Лимон-лайм газировка',
+    image: '/images/fast-food/703.PNG',
+    variants: [
+      { label: '0.5 л', price: 9000 },
+      { label: '1 л', price: 14000 },
+      { label: '1.5 л', price: 17000 },
+      { label: '2 л', price: 22000 },
+    ],
+  },
+  {
+    id: 704,
+    category: 'Напитки',
+    name: 'Пепси',
+    composition: 'Классическая пепси',
+    image: '/images/fast-food/704.PNG',
+    variants: [
+      { label: '0.5 л', price: 9000 },
+      { label: '1 л', price: 14000 },
+      { label: '1.5 л', price: 17000 },
+      { label: '2 л', price: 22000 },
+    ],
+  },
+
+  // --- Вода ---
+  {
+    id: 705,
+    category: 'Напитки',
+    name: 'Вода питьевая',
+    composition: 'Без газа',
+    image: '/images/fast-food/705.PNG',
+    variants: [
+      { label: '0.5 л', price: 4000 },
+      { label: '1 л', price: 6000 },
+      { label: '1.5 л', price: 9000 },
+    ],
+  },
+
+  // --- Соки ---
+  {
+    id: 706,
+    category: 'Напитки',
+    name: 'Сок «Сочная долина»',
+    composition: 'Апельсин / Яблоко / Персик',
+    image: '/images/fast-food/706.PNG',
+    variants: [{ price: 18000 }],
+  },
+  {
+    id: 707,
+    category: 'Напитки',
+    name: 'Сок «Сочная долина» Ананас',
+    composition: 'Ананас',
+    image: '/images/fast-food/707.PNG',
+    variants: [{ price: 23000 }],
+  },
+  {
+    id: 708,
+    category: 'Напитки',
+    name: 'Детский сок',
+    composition: 'Маленькая упаковка',
+    image: '/images/fast-food/708.PNG',
+    variants: [{ price: 7000 }],
+  },
+  {
+    id: 709,
+    category: 'Напитки',
+    name: 'Сок «Вико»',
+    composition: 'Апельсин / Яблоко / Персик',
+    image: '/images/fast-food/709.PNG',
+    variants: [{ price: 21000 }],
+  },
+  {
+    id: 710,
+    category: 'Напитки',
+    name: 'Сок «Вико» Ананас',
+    composition: 'Ананас',
+    image: '/images/fast-food/710.PNG',
+    variants: [{ price: 26000 }],
+  },
+
+  // --- Энергетики ---
+  {
+    id: 711,
+    category: 'Напитки',
+    name: 'Flash',
+    composition: 'Энергетический напиток',
+    image: '/images/fast-food/711.PNG',
+    variants: [{ price: 14000 }],
+  },
+  {
+    id: 712,
+    category: 'Напитки',
+    name: 'Адреналин',
+    composition: 'Энергетический напиток',
+    image: '/images/fast-food/712.PNG',
+    variants: [{ price: 18000 }],
+  },
+  {
+    id: 713,
+    category: 'Напитки',
+    name: 'Rockstar',
+    composition: 'Энергетический напиток',
+    image: '/images/fast-food/713.PNG',
+    variants: [{ price: 14000 }],
   },
 ];
