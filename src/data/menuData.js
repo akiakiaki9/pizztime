@@ -174,40 +174,6 @@ export const pizzaMenu = [
     variants: [{ price: 85000 }],
   },
 
-  // ====================== РОЛЛЫ ======================
-  {
-    id: 301,
-    category: 'Роллы',
-    name: 'Запечённый Киото',
-    composition: 'Запечённый ролл, 8 шт',
-    image: '/images/fast-food/301.PNG',
-    variants: [{ pieces: 8, price: 60000 }],
-  },
-  {
-    id: 302,
-    category: 'Роллы',
-    name: 'Запечённый Фудзи',
-    composition: 'Запечённый ролл, 8 шт',
-    image: '/images/fast-food/302.PNG',
-    variants: [{ pieces: 8, price: 60000 }],
-  },
-  {
-    id: 303,
-    category: 'Роллы',
-    name: 'Дух Японии',
-    composition: 'Ролл, 8 шт',
-    image: '/images/fast-food/303.PNG',
-    variants: [{ pieces: 8, price: 55000 }],
-  },
-  {
-    id: 304,
-    category: 'Роллы',
-    name: 'Хрустящий ролл',
-    composition: 'Хрустящий ролл, 8 шт',
-    image: '/images/fast-food/304.PNG',
-    variants: [{ pieces: 8, price: 55000 }],
-  },
-
   // ====================== ХОТ-ДОГИ ======================
   {
     id: 401,
@@ -291,8 +257,6 @@ export const pizzaMenu = [
       { label: '2 л', price: 22000 },
     ],
   },
-
-  // --- Вода ---
   {
     id: 705,
     category: 'Напитки',
@@ -305,8 +269,6 @@ export const pizzaMenu = [
       { label: '1.5 л', price: 9000 },
     ],
   },
-
-  // --- Соки ---
   {
     id: 706,
     category: 'Напитки',
@@ -347,8 +309,6 @@ export const pizzaMenu = [
     image: '/images/fast-food/710.PNG',
     variants: [{ price: 26000 }],
   },
-
-  // --- Энергетики ---
   {
     id: 711,
     category: 'Напитки',

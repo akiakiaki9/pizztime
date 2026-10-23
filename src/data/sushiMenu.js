@@ -1,7 +1,6 @@
 // src/data/sushiMenu.js
 
 // ====== Исходные данные ======
-// src/data/sushiMenu.js
 export const sushiMenu = [
   // ====================== РОЛЛЫ ХОЛОДНЫЕ ======================
   { id: 1, category: 'Роллы холодные', name: 'Сливочный кунсей', composition: 'Сыр сливочный, копчёный лосось, огурец, масага', variants: [{ pieces: 4, grams: 118, price: 22500 }, { pieces: 8, grams: 236, price: 45000 }] },
@@ -69,21 +68,18 @@ export const sushiMenu = [
   { id: 53, category: 'Удон', name: 'Удон с говядиной', composition: 'С рисом цена одинаковая', variants: [{ price: 45000 }] },
 
   // ====================== ЖАРЕНЫЙ РИС ======================
-  // (Эти позиции остались, так как в новом прайсе нет конкретных названий)
   { id: 54, category: 'Жареный рис', name: 'Рис обжаренный с овощами', composition: null, variants: [{ price: 40000 }] },
   { id: 55, category: 'Жареный рис', name: 'Рис обжаренный с курицей', composition: null, variants: [{ price: 45000 }] },
   { id: 56, category: 'Жареный рис', name: 'Рис обжаренный с креветками', composition: null, variants: [{ price: 45000 }] },
   { id: 57, category: 'Жареный рис', name: 'Рис обжаренный с говядиной', composition: null, variants: [{ price: 45000 }] },
 
   // ====================== ОНИГИРИ ======================
-  // (Оставил все 4 вида из старого меню, чтобы не удалять)
   { id: 58, category: 'Онигири', name: 'Онигири с крабом', composition: null, variants: [{ price: 20000 }] },
   { id: 59, category: 'Онигири', name: 'Онигири с лососем', composition: null, variants: [{ price: 20000 }] },
   { id: 60, category: 'Онигири', name: 'Онигири с креветкой', composition: null, variants: [{ price: 20000 }] },
   { id: 61, category: 'Онигири', name: 'Онигири с курицей', composition: null, variants: [{ price: 20000 }] },
 
   // ====================== ЗАКУСКИ ======================
-  // (Оставил разделение картошки, раз в новом прайсе просто "Картошка")
   { id: 62, category: 'Закуски', name: 'Картофель по-деревенски', composition: null, variants: [{ price: 18000 }] },
   { id: 63, category: 'Закуски', name: 'Картофель фри', composition: null, variants: [{ price: 18000 }] },
   { id: 64, category: 'Закуски', name: 'Креветки темпура', composition: null, variants: [{ pieces: 3, price: 35000 }, { pieces: 5, price: 55000 }] },
@@ -107,6 +103,12 @@ export const sushiMenu = [
   { id: 84, category: 'Закуски и салаты', name: 'Цезарь с лососем/креветкой', composition: null, variants: [{ price: 50000 }] },
   { id: 85, category: 'Закуски и салаты', name: 'Тар-тар хлеб', composition: null, variants: [{ price: 15000 }] },
   { id: 86, category: 'Закуски и салаты', name: 'Салат Чукка', composition: null, variants: [{ grams: 140, price: 25000 }] },
+
+  // ====================== ПЕРЕНЕСЕНО ИЗ menuData.js (бывшая категория «Роллы») ======================
+  { id: 90, category: 'Запечённые роллы', name: 'Запечённый Киото', composition: 'Запечённый ролл, 8 шт', variants: [{ pieces: 8, price: 60000 }] },
+  { id: 91, category: 'Запечённые роллы', name: 'Запечённый Фудзи', composition: 'Запечённый ролл, 8 шт', variants: [{ pieces: 8, price: 60000 }] },
+  { id: 92, category: 'Роллы холодные', name: 'Дух Японии', composition: 'Ролл, 8 шт', variants: [{ pieces: 8, price: 55000 }] },
+  { id: 93, category: 'Горячие роллы', name: 'Хрустящий ролл', composition: 'Хрустящий ролл, 8 шт', variants: [{ pieces: 8, price: 55000 }] },
 
   // ====================== СОУСЫ ======================
   { id: 77, category: 'Соусы', name: 'Соевый соус', composition: null, variants: [{ grams: 40, price: null }] },
