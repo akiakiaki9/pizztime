@@ -30,6 +30,7 @@ export const metadata = {
     'Pizza Time Bukhara',
     'пиццерия Бухара',
     'суши-бар Бухара',
+    'ресторан Бухара',
   ],
   authors: [{ name: 'Akbar Soft', url: 'https://www.akbarsoft.uz' }],
   creator: 'Akbar Soft',
