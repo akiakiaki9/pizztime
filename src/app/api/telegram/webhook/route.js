@@ -4,8 +4,6 @@ import { NextResponse } from 'next/server';
 const TOKEN = process.env.TG_TOKEN;
 const ADMIN_CHAT_ID = process.env.TG_CHAT_ID;
 
-// ===== Хранилище состояний (в памяти процесса) =====
-// В проде лучше заменить на Redis/KV. Пока для пиццерии хватает.
 const states = new Map();
 
 // ===== Утилиты =====
@@ -30,7 +28,7 @@ const answerCallback = (callback_query_id) =>
 const esc = (s) =>
     String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-// ===== Основная клавиатура (снизу) =====
+// ===== Клавиатуры =====
 const mainKeyboard = {
     keyboard: [
         [{ text: '🍕 Меню' }, { text: '🛒 Сделать заказ' }],
@@ -45,40 +43,36 @@ const cancelKeyboard = {
     resize_keyboard: true,
 };
 
-// ===== Приветствие =====
+// ===== Тексты =====
 const welcomeText = (name) =>
     `Привет, <b>${esc(name)}</b>! 👋\n\n` +
     `Это бот <b>Pizza Time Bukhara</b> 🍕🍣\n\n` +
     `Выберите, что вас интересует — кнопки внизу 👇`;
 
-// ===== Текст меню =====
 const menuText = () =>
     `🍕 <b>Наше меню</b>\n\n` +
     `Пицца, суши, роллы и фаст-фуд — всё свежее, готовим каждый день.\n\n` +
     `👉 Открыть меню: https://www.pizzatime.uz/menu`;
 
-// ===== Контакты =====
 const contactText = () =>
     `📞 <b>Связаться с нами</b>\n\n` +
     `+998 93 478 88 85\n` +
     `+998 97 292 22 99\n\n` +
     `🕐 Ежедневно 10:00 – 00:00`;
 
-// ===== Адрес =====
 const addressText = () =>
     `📍 <b>Мы находимся здесь</b>\n\n` +
     `Бухара, ул. Амир Темура, 1/1\n\n` +
     `Нажмите кнопку ниже, чтобы построить маршрут 👇`;
 
-// ===== Обработка /start =====
+// ===== Обработчики =====
 async function handleStart(chatId, firstName) {
-    states.delete(chatId);
+    states.delete(chatId); // сбрасываем заказ, если он был
     await sendMessage(chatId, welcomeText(firstName), {
         reply_markup: mainKeyboard,
     });
 }
 
-// ===== Обработка /menu, кнопка «Меню» =====
 async function handleMenu(chatId) {
     await sendMessage(chatId, menuText(), {
         reply_markup: {
@@ -90,7 +84,6 @@ async function handleMenu(chatId) {
     });
 }
 
-// ===== Обработка «Позвонить» =====
 async function handleCall(chatId) {
     await sendMessage(chatId, contactText(), {
         reply_markup: {
@@ -102,9 +95,7 @@ async function handleCall(chatId) {
     });
 }
 
-// ===== Обработка «Адрес» =====
 async function handleAddress(chatId) {
-    // Отправляем точку на карте + маршрут
     await sendLocation(chatId, 39.743122, 64.401846);
     await sendMessage(chatId, addressText(), {
         reply_markup: {
@@ -126,7 +117,6 @@ async function handleAddress(chatId) {
     });
 }
 
-// ===== Пошаговый заказ =====
 async function handleOrderStart(chatId) {
     states.set(chatId, { step: 'name', data: {} });
     await sendMessage(
@@ -141,12 +131,9 @@ async function handleOrderStart(chatId) {
 async function handleOrderStep(chatId, text, state) {
     const { step, data } = state;
 
-    // Отмена в любой момент
     if (text === '❌ Отменить') {
         states.delete(chatId);
-        await sendMessage(chatId, 'Заказ отменён ❌', {
-            reply_markup: mainKeyboard,
-        });
+        await sendMessage(chatId, 'Заказ отменён ❌', { reply_markup: mainKeyboard });
         return;
     }
 
@@ -165,10 +152,7 @@ async function handleOrderStep(chatId, text, state) {
         }
         data.phone = text;
         states.set(chatId, { step: 'address', data });
-        await sendMessage(
-            chatId,
-            `Шаг 3 из 4: адрес доставки?\n\nНапишите улицу, дом, квартиру:`
-        );
+        await sendMessage(chatId, `Шаг 3 из 4: адрес доставки?\n\nНапишите улицу, дом, квартиру:`);
         return;
     }
 
@@ -208,7 +192,6 @@ async function handleOrderStep(chatId, text, state) {
     }
 }
 
-// ===== Отправка заказа админу =====
 async function sendOrderToAdmin(data, clientChatId) {
     const text =
         `🍕 <b>Новый заказ из Telegram</b>\n\n` +
@@ -226,6 +209,7 @@ async function sendOrderToAdmin(data, clientChatId) {
 // ===== Основной обработчик =====
 export async function POST(req) {
     try {
+        // Проверка секрета (если настроен)
         const secret = req.headers.get('x-telegram-bot-api-secret-token');
         if (process.env.TG_WEBHOOK_SECRET && secret !== process.env.TG_WEBHOOK_SECRET) {
             return NextResponse.json({ ok: false }, { status: 401 });
@@ -233,7 +217,7 @@ export async function POST(req) {
 
         const update = await req.json();
 
-        // ===== Callback (inline-кнопки) =====
+        // ===== 1. Inline-кнопки (Callback) =====
         if (update.callback_query) {
             const cb = update.callback_query;
             const chatId = cb.message.chat.id;
@@ -258,14 +242,12 @@ export async function POST(req) {
                 );
             } else if (cb.data === 'cancel_order') {
                 states.delete(chatId);
-                await sendMessage(chatId, 'Заказ отменён ❌', {
-                    reply_markup: mainKeyboard,
-                });
+                await sendMessage(chatId, 'Заказ отменён ❌', { reply_markup: mainKeyboard });
             }
             return NextResponse.json({ ok: true });
         }
 
-        // ===== Текстовые сообщения =====
+        // ===== 2. Текстовые сообщения =====
         const msg = update.message;
         if (!msg?.text) return NextResponse.json({ ok: true });
 
@@ -273,31 +255,24 @@ export async function POST(req) {
         const text = msg.text.trim();
         const firstName = msg.from?.first_name || 'друг';
 
-        // Команды
+        // --- СНАЧАЛА проверяем команды и кнопки ---
         if (text === '/start') return handleStart(chatId, firstName);
-        if (text === '/menu') return handleMenu(chatId);
-        if (text === '/contact') return handleCall(chatId);
-        if (text === '/address') return handleAddress(chatId);
-        if (text === '/order') return handleOrderStart(chatId);
+        if (text === '/menu' || text === '🍕 Меню') return handleMenu(chatId);
+        if (text === '/contact' || text === '📞 Позвонить') return handleCall(chatId);
+        if (text === '/address' || text === '📍 Адрес') return handleAddress(chatId);
+        if (text === '/order' || text === '🛒 Сделать заказ') return handleOrderStart(chatId);
 
-        // Кнопки клавиатуры
-        if (text === '🍕 Меню') return handleMenu(chatId);
-        if (text === '🛒 Сделать заказ') return handleOrderStart(chatId);
-        if (text === '📞 Позвонить') return handleCall(chatId);
-        if (text === '📍 Адрес') return handleAddress(chatId);
-
-        // Если клиент в процессе заказа — продолжаем
+        // --- ЗАТЕМ проверяем, не находится ли он в процессе заказа ---
         const state = states.get(chatId);
         if (state) {
             await handleOrderStep(chatId, text, state);
             return NextResponse.json({ ok: true });
         }
 
-        // Иначе — стандартный ответ
+        // --- Если ничего не подошло, пишем "Не понял" ---
         await sendMessage(
             chatId,
-            `Не понял 🤔\n\n` +
-            `Пожалуйста, воспользуйтесь кнопками внизу 👇`,
+            `Не понял 🤔\n\nПожалуйста, воспользуйтесь кнопками внизу 👇`,
             { reply_markup: mainKeyboard }
         );
 
