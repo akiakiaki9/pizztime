@@ -2,8 +2,6 @@
 
 import { NextResponse } from 'next/server';
 
-export const runtime = 'nodejs';
-
 const TOKEN = process.env.TG_TOKEN;
 const MENU_URL = 'https://www.pizzatime.uz/menu';
 
