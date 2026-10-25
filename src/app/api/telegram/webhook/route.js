@@ -1,23 +1,40 @@
+// src/app/api/telegram/webhook/route.js
 
 import { NextResponse } from 'next/server';
 
-const TOKEN = process.env.TG_TOKEN;
+export const runtime = 'nodejs';
 
+const TOKEN = process.env.TG_TOKEN;
 const MENU_URL = 'https://www.pizzatime.uz/menu';
+
+// Два ID администраторов через запятую в Vercel Environment Variables
+const ADMIN_CHAT_IDS = (process.env.TG_CHAT_IDS || '')
+    .split(',')
+    .map((id) => id.trim())
+    .filter(Boolean);
 
 const LOCATION = {
     latitude: 39.743122,
     longitude: 64.401846,
 };
 
-// ===== Telegram API =====
+// Защита от повторной обработки update в одном экземпляре
+const processedUpdates = new Map();
+const processingUpdates = new Map();
+
+const UPDATE_TTL = 10 * 60 * 1000;
+const MAX_CACHED_UPDATES = 2000;
+
+// ============================================================
+// TELEGRAM API
+// ============================================================
 
 async function tg(method, body) {
     if (!TOKEN) {
-        throw new Error('TG_TOKEN не задан в переменных окружения');
+        throw new Error('Переменная TG_TOKEN не настроена в Vercel');
     }
 
-    const res = await fetch(
+    const response = await fetch(
         `https://api.telegram.org/bot${TOKEN}/${method}`,
         {
             method: 'POST',
@@ -25,51 +42,80 @@ async function tg(method, body) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(body),
-            cache: 'no-store',
         }
     );
 
-    const result = await res.json();
+    const result = await response.json();
 
-    if (!res.ok || !result.ok) {
+    if (!response.ok || !result.ok) {
         throw new Error(
-            `Telegram API ${method}: ${
-                result.description || res.statusText
-            }`
+            `Telegram API ${method}: ${result.description || response.status}`
         );
     }
 
     return result;
 }
 
-const sendMessage = (chat_id, text, extra = {}) =>
-    tg('sendMessage', {
-        chat_id,
+async function sendMessage(chatId, text, extra = {}) {
+    return tg('sendMessage', {
+        chat_id: chatId,
         text,
         parse_mode: 'HTML',
         ...extra,
     });
+}
 
-const sendLocation = (chat_id) =>
-    tg('sendLocation', {
-        chat_id,
-        latitude: LOCATION.latitude,
-        longitude: LOCATION.longitude,
+async function sendLocation(chatId, latitude, longitude) {
+    return tg('sendLocation', {
+        chat_id: chatId,
+        latitude,
+        longitude,
     });
+}
 
-const answerCallback = (callback_query_id, text) =>
-    tg('answerCallbackQuery', {
-        callback_query_id,
-        text,
+async function answerCallback(callbackQueryId) {
+    return tg('answerCallbackQuery', {
+        callback_query_id: callbackQueryId,
     });
+}
 
-const esc = (value) =>
-    String(value ?? '')
+// Экранирование текста для HTML-разметки Telegram
+function esc(value) {
+    return String(value ?? '')
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
+}
 
-// ===== Клавиатуры =====
+// ============================================================
+// УВЕДОМЛЕНИЯ ДВУМ АДМИНИСТРАТОРАМ
+// ============================================================
+
+async function sendToAdmins(text, extra = {}) {
+    if (ADMIN_CHAT_IDS.length === 0) {
+        console.error('Не настроена переменная TG_CHAT_IDS');
+        return;
+    }
+
+    const results = await Promise.allSettled(
+        ADMIN_CHAT_IDS.map((chatId) =>
+            sendMessage(chatId, text, extra)
+        )
+    );
+
+    results.forEach((result, index) => {
+        if (result.status === 'rejected') {
+            console.error(
+                `Не удалось отправить сообщение администратору ${ADMIN_CHAT_IDS[index]}:`,
+                result.reason
+            );
+        }
+    });
+}
+
+// ============================================================
+// КЛАВИАТУРЫ
+// ============================================================
 
 const mainKeyboard = {
     keyboard: [
@@ -86,43 +132,7 @@ const mainKeyboard = {
     is_persistent: true,
 };
 
-// ===== Тексты =====
-
-const welcomeText = (name) =>
-    `Привет, <b>${esc(name)}</b>! 👋\n\n` +
-    `Добро пожаловать в <b>Pizza Time Bukhara</b> 🍕🍣\n\n` +
-    `Здесь вы можете посмотреть наше меню и перейти к оформлению заказа.\n\n` +
-    `Выберите нужное действие в меню ниже 👇`;
-
-const menuText = () =>
-    `🍕 <b>Меню Pizza Time Bukhara</b>\n\n` +
-    `На нашем сайте вы можете посмотреть все блюда, выбрать любимые позиции и оформить заказ.\n\n` +
-    `👇 Нажмите кнопку ниже, чтобы открыть меню.`;
-
-const orderText = () =>
-    `🛒 <b>Как оформить заказ?</b>\n\n` +
-    `Всё просто — оформите заказ на нашем сайте! 🍕\n\n` +
-    `1️⃣ Нажмите кнопку «Открыть меню» ниже.\n\n` +
-    `2️⃣ Выберите понравившиеся блюда и добавьте их в корзину.\n\n` +
-    `3️⃣ Откройте корзину и проверьте выбранные блюда и количество.\n\n` +
-    `4️⃣ Заполните необходимые данные для доставки и оформите заказ.\n\n` +
-    `✅ Готово! Ожидайте подтверждения заказа.\n\n` +
-    `Приятного аппетита! ❤️`;
-
-const contactText = () =>
-    `📞 <b>Связаться с нами</b>\n\n` +
-    `+998 93 478 88 85\n` +
-    `+998 97 292 22 99\n\n` +
-    `🕐 Ежедневно 10:00 – 00:00`;
-
-const addressText = () =>
-    `📍 <b>Pizza Time Bukhara</b>\n\n` +
-    `Бухара, ул. Амир Темура, 1/1\n\n` +
-    `Нажмите на кнопку ниже, чтобы построить маршрут 👇`;
-
-// ===== Кнопки меню сайта =====
-
-const websiteKeyboard = {
+const menuInlineKeyboard = {
     inline_keyboard: [
         [
             {
@@ -133,7 +143,7 @@ const websiteKeyboard = {
     ],
 };
 
-const orderKeyboard = {
+const orderInlineKeyboard = {
     inline_keyboard: [
         [
             {
@@ -141,33 +151,21 @@ const orderKeyboard = {
                 url: MENU_URL,
             },
         ],
-        [
-            {
-                text: '🍕 Посмотреть меню',
-                callback_data: 'show_menu',
-            },
-        ],
     ],
 };
 
-const contactKeyboard = {
+const contactInlineKeyboard = {
     inline_keyboard: [
         [
             {
-                text: '📞 Позвонить +998 93 478 88 85',
-                url: 'tel:+998934788885',
-            },
-        ],
-        [
-            {
-                text: '📞 Позвонить +998 97 292 22 99',
-                url: 'tel:+998972922299',
+                text: '🍕 Открыть меню',
+                url: MENU_URL,
             },
         ],
     ],
 };
 
-const addressKeyboard = {
+const addressInlineKeyboard = {
     inline_keyboard: [
         [
             {
@@ -184,7 +182,61 @@ const addressKeyboard = {
     ],
 };
 
-// ===== Обработчики =====
+// ============================================================
+// ТЕКСТЫ
+// ============================================================
+
+function welcomeText(name) {
+    return (
+        `Привет, <b>${esc(name)}</b>! 👋\n\n` +
+        `Добро пожаловать в <b>Pizza Time Bukhara</b> 🍕🍣\n\n` +
+        `У нас вы найдёте пиццу, суши, роллы и фаст-фуд.\n\n` +
+        `Выберите нужный раздел с помощью кнопок ниже 👇`
+    );
+}
+
+function menuText() {
+    return (
+        `🍕 <b>Меню Pizza Time Bukhara</b>\n\n` +
+        `Пицца, суши, роллы и фаст-фуд — выбирайте любимые блюда на нашем сайте.\n\n` +
+        `Нажмите кнопку ниже, чтобы открыть меню 👇`
+    );
+}
+
+function orderText() {
+    return (
+        `🛒 <b>Как оформить заказ?</b>\n\n` +
+        `1️⃣ Нажмите кнопку «Выбрать блюда и заказать».\n\n` +
+        `2️⃣ Выберите блюда и добавьте их в корзину.\n\n` +
+        `3️⃣ Откройте корзину и проверьте свой заказ.\n\n` +
+        `4️⃣ Заполните необходимые данные для доставки.\n\n` +
+        `5️⃣ Проверьте информацию и подтвердите заказ на сайте.\n\n` +
+        `Готово! Приятного аппетита! 🍕`
+    );
+}
+
+function contactText() {
+    return (
+        `📞 <b>Связаться с Pizza Time Bukhara</b>\n\n` +
+        `Телефоны:\n` +
+        `+998 93 478 88 85\n` +
+        `+998 97 292 22 99\n\n` +
+        `🕐 Ежедневно: 10:00–00:00\n\n` +
+        `Вы также можете открыть меню на сайте 👇`
+    );
+}
+
+function addressText() {
+    return (
+        `📍 <b>Pizza Time Bukhara</b>\n\n` +
+        `Бухара, ул. Амир Темура, 1/1\n\n` +
+        `Выберите карту ниже, чтобы построить маршрут 👇`
+    );
+}
+
+// ============================================================
+// ОБРАБОТЧИКИ КОМАНД
+// ============================================================
 
 async function handleStart(chatId, firstName) {
     await sendMessage(
@@ -201,7 +253,8 @@ async function handleMenu(chatId) {
         chatId,
         menuText(),
         {
-            reply_markup: websiteKeyboard,
+            reply_markup: menuInlineKeyboard,
+            disable_web_page_preview: true,
         }
     );
 }
@@ -211,7 +264,8 @@ async function handleOrder(chatId) {
         chatId,
         orderText(),
         {
-            reply_markup: orderKeyboard,
+            reply_markup: orderInlineKeyboard,
+            disable_web_page_preview: true,
         }
     );
 }
@@ -221,55 +275,71 @@ async function handleCall(chatId) {
         chatId,
         contactText(),
         {
-            reply_markup: contactKeyboard,
+            reply_markup: contactInlineKeyboard,
         }
     );
 }
 
 async function handleAddress(chatId) {
-    await sendLocation(chatId);
+    await sendLocation(
+        chatId,
+        LOCATION.latitude,
+        LOCATION.longitude
+    );
 
     await sendMessage(
         chatId,
         addressText(),
         {
-            reply_markup: addressKeyboard,
+            reply_markup: addressInlineKeyboard,
         }
     );
 }
 
-// ===== Обработка обновлений Telegram =====
+// ============================================================
+// ОСНОВНАЯ ОБРАБОТКА UPDATE
+// ============================================================
 
 async function processUpdate(update) {
-    // Обработка нажатий inline-кнопок.
-    if (update.callback_query) {
-        const cb = update.callback_query;
-        const chatId = cb.message?.chat?.id;
+    // --------------------------------------------------------
+    // Inline-кнопки
+    // --------------------------------------------------------
 
-        if (cb.data === 'show_menu') {
-            await answerCallback(cb.id);
+    if (update.callback_query) {
+        const callback = update.callback_query;
+
+        await answerCallback(callback.id);
+
+        // Заказы оформляются на сайте.
+        // Старые кнопки оформления заказа перенаправляем в меню.
+        if (
+            callback.data === 'start_order' ||
+            callback.data === 'show_menu'
+        ) {
+            const chatId = callback.message?.chat?.id;
+
             if (chatId) {
-                await handleMenu(chatId);
+                await handleOrder(chatId);
             }
-            return;
         }
 
-        await answerCallback(cb.id);
         return;
     }
 
-    const msg = update.message;
+    // --------------------------------------------------------
+    // Текстовые сообщения
+    // --------------------------------------------------------
 
-    // Игнорируем сообщения без текста.
-    if (!msg?.text) {
+    const message = update.message;
+
+    if (!message?.text || !message.chat?.id) {
         return;
     }
 
-    const chatId = msg.chat.id;
-    const text = msg.text.trim();
-    const firstName = msg.from?.first_name || 'друг';
+    const chatId = String(message.chat.id);
+    const text = message.text.trim();
+    const firstName = message.from?.first_name || 'друг';
 
-    // Команды Telegram.
     if (text === '/start' || text.startsWith('/start ')) {
         await handleStart(chatId, firstName);
         return;
@@ -280,48 +350,78 @@ async function processUpdate(update) {
         return;
     }
 
-    if (text === '/order' || text === '🛒 Сделать заказ') {
+    if (
+        text === '/order' ||
+        text === '🛒 Сделать заказ'
+    ) {
         await handleOrder(chatId);
         return;
     }
 
-    if (text === '/contact' || text === '📞 Позвонить') {
+    if (
+        text === '/contact' ||
+        text === '📞 Позвонить'
+    ) {
         await handleCall(chatId);
         return;
     }
 
-    if (text === '/address' || text === '📍 Адрес') {
+    if (
+        text === '/address' ||
+        text === '📍 Адрес'
+    ) {
         await handleAddress(chatId);
         return;
     }
 
-    // Неизвестная команда или текст.
+    // Проверка отправки тестового сообщения администраторам
+    if (text === '/testadmin') {
+        if (!ADMIN_CHAT_IDS.includes(chatId)) {
+            await sendMessage(
+                chatId,
+                '⛔ Эта команда доступна только администраторам.',
+                { reply_markup: mainKeyboard }
+            );
+            return;
+        }
+
+        await sendToAdmins(
+            `✅ <b>Тестовое сообщение</b>\n\n` +
+            `Бот Pizza Time Bukhara работает.\n` +
+            `Chat ID: <code>${esc(chatId)}</code>\n` +
+            `Время: ${new Date().toLocaleString('ru-RU', {
+                timeZone: 'Asia/Tashkent',
+            })}`
+        );
+
+        await sendMessage(
+            chatId,
+            '✅ Проверка выполнена. Бот отправил тестовые сообщения администраторам.',
+            { reply_markup: mainKeyboard }
+        );
+        return;
+    }
+
+    // Неизвестное сообщение
     await sendMessage(
         chatId,
         `Не понял 🤔\n\n` +
-        `Вы можете открыть меню, оформить заказ, посмотреть адрес или связаться с нами.\n\n` +
-        `Выберите действие с помощью кнопок ниже 👇`,
+        `Воспользуйтесь кнопками внизу, чтобы открыть меню, ` +
+        `оформить заказ, узнать контакты или адрес.`,
         {
             reply_markup: mainKeyboard,
         }
     );
 }
 
-// ===== Защита от повторных обновлений =====
-
-// Эти коллекции помогают только внутри одного экземпляра Vercel.
-// Для общей дедупликации между экземплярами потребуется Redis или БД.
-
-const processedUpdates = new Map();
-const processingUpdates = new Map();
-
-const UPDATE_TTL = 10 * 60 * 1000;
-const MAX_CACHED_UPDATES = 2000;
+// ============================================================
+// ОЧИСТКА КЭША UPDATE
+// ============================================================
 
 function cleanupProcessedUpdates() {
     const now = Date.now();
 
-    for (const [id, timestamp] of processedUpdates) {
+    for (const [id, timestamp] of processedUpdates.entries()) {
         if (now - timestamp > UPDATE_TTL) {
             processedUpdates.delete(id);
         }
@@ -333,102 +433,88 @@ function cleanupProcessedUpdates() {
     }
 }
 
-// ===== Webhook =====
+// ============================================================
+// WEBHOOK POST
+// ============================================================
 
 export async function POST(req) {
     try {
-        const secret = req.headers.get(
-            'x-telegram-bot-api-secret-token'
-        );
+        // Проверка секрета, если он настроен
+        const configuredSecret = process.env.TG_WEBHOOK_SECRET;
 
-        if (
-            process.env.TG_WEBHOOK_SECRET &&
-            secret !== process.env.TG_WEBHOOK_SECRET
-        ) {
-            return NextResponse.json(
-                { ok: false },
-                { status: 401 }
+        if (configuredSecret) {
+            const receivedSecret = req.headers.get(
+                'x-telegram-bot-api-secret-token'
             );
+
+            if (receivedSecret !== configuredSecret) {
+                return NextResponse.json(
+                    { ok: false },
+                    { status: 401 }
+                );
+            }
         }
 
         const update = await req.json();
-        const updateId = update.update_id;
+        const updateId = update?.update_id;
 
         if (updateId === undefined || updateId === null) {
-            console.error(
-                '[telegram webhook] Missing update_id'
-            );
-
             return NextResponse.json({ ok: true });
         }
 
         cleanupProcessedUpdates();
 
-        // Повторное обновление, которое уже обработано.
+        // Update уже обработан
         if (processedUpdates.has(updateId)) {
-            console.log(
-                '[telegram webhook] Duplicate ignored:',
-                updateId
-            );
-
             return NextResponse.json({ ok: true });
         }
 
-        // То же обновление уже выполняется.
+        // Этот update уже обрабатывается в данном экземпляре
         const existingTask = processingUpdates.get(updateId);
 
         if (existingTask) {
             await existingTask;
-
             return NextResponse.json({ ok: true });
         }
 
         const task = processUpdate(update);
+
         processingUpdates.set(updateId, task);
 
         try {
             await task;
-
-            processedUpdates.set(updateId, Date.now());
-
-            console.log(
-                '[telegram webhook] Processed:',
-                updateId
-            );
-
-            return NextResponse.json({ ok: true });
         } catch (error) {
             console.error(
-                '[telegram webhook] Processing failed:',
-                updateId,
+                `[Telegram update ${updateId}]`,
                 error
-            );
-
-            return NextResponse.json(
-                { ok: false },
-                { status: 500 }
             );
         } finally {
             processingUpdates.delete(updateId);
-        }
-    } catch (error) {
-        console.error(
-            '[telegram webhook] Request failed:',
-            error
-        );
 
-        return NextResponse.json(
-            { ok: false },
-            { status: 500 }
-        );
+            // Не допускаем повторного ответа на этот update
+            // при повторной доставке Telegram в тот же экземпляр.
+            processedUpdates.set(updateId, Date.now());
+            cleanupProcessedUpdates();
+        }
+
+        return NextResponse.json({ ok: true });
+    } catch (error) {
+        console.error('[Telegram webhook error]', error);
+
+        // Возвращаем 200, чтобы Telegram не зацикливал повторы
+        // из-за ошибки обработки.
+        return NextResponse.json({ ok: true });
     }
 }
 
-// ===== Проверка доступности =====
+// ============================================================
+// WEBHOOK GET — ПРОВЕРКА ДОСТУПНОСТИ
+// ============================================================
 
 export async function GET() {
     return NextResponse.json({
         ok: true,
         service: 'telegram-webhook',
+        adminsConfigured: ADMIN_CHAT_IDS.length,
     });
 }
