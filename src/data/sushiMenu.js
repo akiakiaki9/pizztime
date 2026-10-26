@@ -111,11 +111,13 @@ export const sushiMenu = [
   { id: 93, category: 'Горячие роллы', name: 'Хрустящий ролл', composition: 'Хрустящий ролл, 8 шт', variants: [{ pieces: 8, price: 55000 }] },
 
   // ====================== СОУСЫ ======================
-  { id: 77, category: 'Соусы', name: 'Соевый соус', composition: null, variants: [{ grams: 40, price: null }] },
-  { id: 78, category: 'Соусы', name: 'Васаби', composition: null, variants: [{ grams: 10, price: null }] },
-  { id: 79, category: 'Соусы', name: 'Имбирь', composition: null, variants: [{ grams: 40, price: null }] },
-  { id: 80, category: 'Соусы', name: 'Спайси соус', composition: null, variants: [{ grams: 40, price: null }] },
-  { id: 81, category: 'Соусы', name: 'Сырный соус', composition: null, variants: [{ grams: 40, price: null }] },
+  { id: 77, category: 'Соусы', name: 'Соевый соус', composition: null, variants: [{ grams: 40, price: 5000 }] },
+  { id: 78, category: 'Соусы', name: 'Васаби', composition: null, variants: [{ grams: 10, price: 5000 }] },
+  { id: 79, category: 'Соусы', name: 'Имбирь', composition: null, variants: [{ grams: 40, price: 5000 }] },
+  { id: 80, category: 'Соусы', name: 'Спайси соус', composition: null, variants: [{ grams: 40, price: 5000 }] },
+  { id: 81, category: 'Соусы', name: 'Сырный соус', composition: null, variants: [{ grams: 40, price: 5000 }] },
+  { id: 95, category: 'Соусы', name: 'Чесночный соус (фирменный)', composition: null, variants: [{ grams: 40, price: 5000 }] },
+  { id: 96, category: 'Соусы', name: 'Томатный соус', composition: null, variants: [{ grams: 40, price: 5000 }] },
 ];
 
 // ====== Плоский список для UI ======
