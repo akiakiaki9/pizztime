@@ -48,6 +48,16 @@ export default function Modal({ item, onClose, onAdd }) {
       price: variant.price,
       image: src,
     });
+    if (item.containerPrice) {
+      onAdd({
+        id: `${item.source}-${item.id}-container`,
+        productId: `${item.id}-container`,
+        source: item.source,
+        name: `Контейнер для ${item.name} (1 кг)`,
+        price: item.containerPrice,
+        image: src,
+      });
+    }
     onClose();
   };
 

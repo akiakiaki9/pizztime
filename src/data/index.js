@@ -25,6 +25,27 @@ export const flatPizzaMenu = pizzaMenu.map((item) => ({
 }));
 
 export const allMenu = [...flatSushiMenu, ...flatPizzaMenu];
-export const allCategories = ['Все', ...new Set(allMenu.map((i) => i.category))];
+const menuCategories = [...new Set(allMenu.map((item) => item.category))];
+const fastFoodCategories = [
+  ...new Set(
+    pizzaMenu
+      .map((item) => item.category)
+      .filter((category) => !['Акции', 'Добавки', 'Напитки'].includes(category))
+  ),
+];
+const sushiCategories = [...new Set(sushiMenu.map((item) => item.category))];
+const orderedCategories = [
+  'Акции',
+  ...fastFoodCategories,
+  'Добавки',
+  ...sushiCategories,
+  'Напитки',
+];
+
+export const allCategories = [
+  'Акции',
+  'Все',
+  ...new Set([...orderedCategories, ...menuCategories]),
+].filter((category) => category === 'Все' || menuCategories.includes(category));
 export const findMenuItem = (source, id) =>
   allMenu.find((i) => i.source === source && i.id === id);

@@ -21,7 +21,10 @@ export default function MenuItem({ item, onClick }) {
     const src = imgError ? PLACEHOLDER : item.image || PLACEHOLDER;
 
     return (
-        <article className="menu-item" onClick={() => onClick(item)}>
+        <article
+            className={`menu-item${item.category === 'Акции' ? ' menu-item--promotion' : ''}`}
+            onClick={() => onClick(item)}
+        >
             <div className="menu-item-img">
                 <Image
                     src={src}
@@ -33,6 +36,9 @@ export default function MenuItem({ item, onClick }) {
                 />
                 {item.category && (
                     <span className="menu-item-badge">{item.category}</span>
+                )}
+                {item.category === 'Акции' && (
+                    <span className="menu-item-promo-label">Спецпредложение</span>
                 )}
             </div>
 

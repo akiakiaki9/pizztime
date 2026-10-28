@@ -4,13 +4,14 @@ export const pizzaMenu = [
   {
     id: 101,
     category: 'Пиццы',
-    name: 'Сырная (NEW)',
+    name: 'Сырная',
     composition: '3 вида сыра, dor blue cheese',
     image: '/images/fast-food/101.PNG',
     variants: [
       { size: 25, price: 55000 },
-      { size: 30, price: 85000 },
-      { size: 35, price: 105000 },
+      { size: 30, price: 65000 },
+      { size: 35, price: 85000 },
+      { size: 40, label: 'Мега (40 см)', price: 105000 },
     ],
   },
   {
@@ -21,8 +22,9 @@ export const pizzaMenu = [
     image: '/images/fast-food/102.PNG',
     variants: [
       { size: 25, price: 50000 },
-      { size: 30, price: 80000 },
-      { size: 35, price: 95000 },
+      { size: 30, price: 65000 },
+      { size: 35, price: 80000 },
+      { size: 40, label: 'Мега (40 см)', price: 96000 },
     ],
   },
   {
@@ -33,32 +35,35 @@ export const pizzaMenu = [
     image: '/images/fast-food/103.PNG',
     variants: [
       { size: 25, price: 60000 },
-      { size: 30, price: 90000 },
-      { size: 35, price: 120000 },
+      { size: 30, price: 80000 },
+      { size: 35, price: 100000 },
+      { size: 40, label: 'Мега (40 см)', price: 120000 },
     ],
   },
   {
     id: 104,
     category: 'Пиццы',
     name: 'Chicken с помидорами',
-    composition: 'Сыр, соус, помидоры, куриная грудка',
+    composition: 'Сыр, томатный соус, куриная грудка',
     image: '/images/fast-food/104.PNG',
     variants: [
       { size: 25, price: 50000 },
-      { size: 30, price: 85000 },
-      { size: 35, price: 100000 },
+      { size: 30, price: 65000 },
+      { size: 35, price: 80000 },
+      { size: 40, label: 'Мега (40 см)', price: 100000 },
     ],
   },
   {
     id: 105,
     category: 'Пиццы',
-    name: 'Пеперони',
+    name: 'Пепперони',
     composition: 'Сыр, томатный соус, колбаса пеперони',
     image: '/images/fast-food/105.PNG',
     variants: [
-      { size: 25, price: 70000 },
-      { size: 30, price: 90000 },
-      { size: 35, price: 110000 },
+      { size: 25, price: 60000 },
+      { size: 30, price: 70000 },
+      { size: 35, price: 90000 },
+      { size: 40, label: 'Мега (40 см)', price: 110000 },
     ],
   },
   {
@@ -69,8 +74,9 @@ export const pizzaMenu = [
     image: '/images/fast-food/106.PNG',
     variants: [
       { size: 25, price: 60000 },
-      { size: 30, price: 90000 },
-      { size: 35, price: 120000 },
+      { size: 30, price: 80000 },
+      { size: 35, price: 100000 },
+      { size: 40, label: 'Мега (40 см)', price: 120000 },
     ],
   },
   {
@@ -81,8 +87,9 @@ export const pizzaMenu = [
     image: '/images/fast-food/107.PNG',
     variants: [
       { size: 25, price: 50000 },
-      { size: 30, price: 85000 },
-      { size: 35, price: 100000 },
+      { size: 30, price: 65000 },
+      { size: 35, price: 80000 },
+      { size: 40, label: 'Мега (40 см)', price: 100000 },
     ],
   },
   {
@@ -93,8 +100,9 @@ export const pizzaMenu = [
     image: '/images/fast-food/108.PNG',
     variants: [
       { size: 25, price: 55000 },
-      { size: 30, price: 85000 },
-      { size: 35, price: 100000 },
+      { size: 30, price: 70000 },
+      { size: 35, price: 85000 },
+      { size: 40, label: 'Мега (40 см)', price: 105000 },
     ],
   },
   {
@@ -104,8 +112,8 @@ export const pizzaMenu = [
     composition: '3 вида сыра, Президент, сырный соус, мясо гов, ветчина, соль, огурцы, помидоры, зелень',
     image: '/images/fast-food/109.PNG',
     variants: [
-      { size: 30, price: 115000 },
-      { size: 35, price: 140000 },
+      { size: 35, price: 115000 },
+      { size: 40, label: 'Мега (40 см)', price: 140000 },
     ],
   },
   {
@@ -115,30 +123,30 @@ export const pizzaMenu = [
     composition: 'Сыр, соус томатный, ветчина, салями, грибы, корнишоны',
     image: '/images/fast-food/110.PNG',
     variants: [
-      { size: 25, price: 90000 },
-      { size: 30, price: 115000 },
+      { size: 35, price: 90000 },
+      { size: 40, label: 'Мега (40 см)', price: 115000 },
     ],
   },
   {
     id: 111,
     category: 'Пиццы',
-    name: 'Мясной Комби',
-    composition: 'Сыр, соус, мясо говяжий и барбекю, мясо говяжий, помидор, маслины, шампиньоны',
+    name: 'Мясо комби',
+    composition: 'Сыр, томатный соус, ветчина, салями, грибы, корнишоны',
     image: '/images/fast-food/111.PNG',
     variants: [
-      { size: 30, price: 110000 },
-      { size: 35, price: 135000 },
+      { size: 35, price: 90000 },
+      { size: 40, label: 'Мега (40 см)', price: 115000 },
     ],
   },
   {
     id: 112,
     category: 'Пиццы',
-    name: 'Pizza Time (новинка)',
-    composition: 'Сыр, соус, колбаса чедр, болгарский перец, помидоры, шампиньоны, маслины, зелень',
+    name: 'Pizza Time',
+    composition: 'Сыр, соус, колбаса кубиками, охотничья колбаса, помидоры, шампиньоны, маслины, майонез',
     image: '/images/fast-food/112.PNG',
     variants: [
-      { size: 30, price: 130000 },
-      { size: 35, price: 160000 },
+      { size: 35, price: 130000 },
+      { size: 40, label: 'Мега (40 см)', price: 150000 },
     ],
   },
   {
@@ -148,19 +156,19 @@ export const pizzaMenu = [
     composition: 'Сыр, соус, курица, грибы, помидор',
     image: '/images/fast-food/113.PNG',
     variants: [
-      { size: 25, price: 90000 },
-      { size: 30, price: 110000 },
+      { size: 35, price: 90000 },
+      { size: 40, label: 'Мега (40 см)', price: 110000 },
     ],
   },
   {
     id: 114,
     category: 'Пиццы',
     name: '4 Сезона',
-    composition: 'Сыр, соус, мясо говяжий, пепперони колбаса, шампиньоны, помидоры',
+    composition: 'Сыр, соус, мясо говяжье, колбаса пепперони, помидоры',
     image: '/images/fast-food/114.PNG',
     variants: [
-      { size: 30, price: 120000 },
-      { size: 35, price: 145000 },
+      { size: 35, price: 120000 },
+      { size: 40, label: 'Мега (40 см)', price: 145000 },
     ],
   },
 
@@ -169,39 +177,122 @@ export const pizzaMenu = [
     id: 201,
     category: 'КФС',
     name: 'Крылышки',
-    composition: 'Куриные крылышки в хрустящей панировке',
+    composition: 'Куриные крылышки в хрустящей панировке. Контейнер за 1 кг — 3 000 сум, добавляется к заказу.',
     image: '/images/fast-food/201.PNG',
-    variants: [{ price: 85000 }],
+    containerPrice: 3000,
+    variants: [{ label: '1 кг', grams: 1000, price: 85000 }],
+  },
+  {
+    id: 202,
+    category: 'КФС',
+    name: 'Филе KFC',
+    composition: 'Куриное филе в хрустящей панировке. Контейнер за 1 кг — 3 000 сум, добавляется к заказу.',
+    image: '/images/fast-food/201.PNG',
+    containerPrice: 3000,
+    variants: [{ label: '1 кг', grams: 1000, price: 85000 }],
   },
 
   // ====================== ХОТ-ДОГИ ======================
   {
     id: 401,
     category: 'Хот-доги',
-    name: 'Хот-дог',
-    composition: 'Классический хот-дог',
+    name: 'Хот-дог с 1 сосиской',
+    composition: 'Булочка, 1 сосиска',
     image: '/images/fast-food/401.PNG',
-    variants: [{ price: 16000 }, { price: 20000 }, { price: 24000 }],
+    variants: [{ price: 16000 }],
+  },
+  {
+    id: 402,
+    category: 'Хот-доги',
+    name: 'Хот-дог с 2 сосисками',
+    composition: 'Булочка, 2 сосиски',
+    image: '/images/fast-food/401.PNG',
+    variants: [{ price: 20000 }],
+  },
+  {
+    id: 403,
+    category: 'Хот-доги',
+    name: 'Хот-дог с 2 сосисками и сыром',
+    composition: 'Булочка, 2 сосиски, сыр',
+    image: '/images/fast-food/401.PNG',
+    variants: [{ price: 24000 }],
   },
 
   // ====================== ЛАВАШИ ======================
   {
     id: 501,
     category: 'Лаваши',
-    name: 'Лаваш',
+    name: 'Лаваш обычный',
     composition: 'Лаваш с начинкой',
     image: '/images/fast-food/501.PNG',
-    variants: [{ price: 32000 }, { price: 38000 }, { price: 43000 }],
+    variants: [{ price: 32000 }],
+  },
+  {
+    id: 502,
+    category: 'Лаваши',
+    name: 'Лаваш с сыром',
+    composition: 'Лаваш с начинкой и сыром',
+    image: '/images/fast-food/501.PNG',
+    variants: [{ price: 38000 }],
+  },
+  {
+    id: 503,
+    category: 'Лаваши',
+    name: 'Тандыр лаваш с сыром',
+    composition: 'Лаваш из тандыра с начинкой и сыром',
+    image: '/images/fast-food/501.PNG',
+    variants: [{ price: 43000 }],
   },
 
   // ====================== АРАБ-КАБОБ ======================
   {
     id: 601,
     category: 'Араб кабоб',
-    name: 'Араб кабоб',
+    name: 'Араб кабоб обычный',
     composition: 'Арабский кабоб',
     image: '/images/fast-food/601.PNG',
-    variants: [{ price: 32000 }, { price: 38000 }],
+    variants: [{ price: 32000 }],
+  },
+  {
+    id: 602,
+    category: 'Араб кабоб',
+    name: 'Араб кабоб с сыром',
+    composition: 'Арабский кабоб с сыром',
+    image: '/images/fast-food/601.PNG',
+    variants: [{ price: 38000 }],
+  },
+
+  // ====================== АКЦИИ ======================
+  {
+    id: 800,
+    category: 'Акции',
+    name: 'Акция: 3 пиццы 25 см',
+    composition: 'Сырная, Пепперони и Маргарита (каждая 25 см)',
+    image: '/images/fast-food/101.PNG',
+    variants: [{ label: '3 пиццы · 25 см', price: 110000 }],
+  },
+
+  // ====================== БУРГЕРЫ ======================
+  {
+    id: 801,
+    category: 'Бургеры',
+    name: 'Бургер',
+    composition: 'Булочка, котлета',
+    variants: [{ price: 28000 }],
+  },
+  {
+    id: 802,
+    category: 'Бургеры',
+    name: 'Чизбургер',
+    composition: 'Булочка, котлета, сыр',
+    variants: [{ price: 34000 }],
+  },
+  {
+    id: 803,
+    category: 'Бургеры',
+    name: 'Бигбургер',
+    composition: 'Булочка, 2 котлеты, 2 ломтика сыра',
+    variants: [{ price: 42000 }],
   },
 
   // ====================== НАПИТКИ ======================

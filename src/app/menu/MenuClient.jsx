@@ -40,7 +40,7 @@ export default function MenuClient() {
                     {allCategories.map((cat) => (
                         <button
                             key={cat}
-                            className={`cat-chip ${activeCat === cat ? 'active' : ''}`}
+                            className={`cat-chip${cat === 'Акции' ? ' cat-chip--promotion' : ''} ${activeCat === cat ? 'active' : ''}`}
                             onClick={() => handleCategoryClick(cat)}
                         >
                             {cat}
