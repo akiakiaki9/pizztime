@@ -154,25 +154,28 @@ export async function POST(req) {
     );
 
     // ===== ПРОВЕРКА РЕЗУЛЬТАТОВ =====
+    const sent = results.filter((result) => result.ok);
     const failed = results.filter((result) => !result.ok);
 
-    if (failed.length > 0) {
-      console.error('[order] Не удалось отправить всем администраторам:', failed);
+    if (sent.length === 0) {
+      console.error('[order] Не удалось отправить заказ ни одному администратору:', failed);
 
       return NextResponse.json(
         {
           ok: false,
-          error: 'Не удалось отправить заказ всем администраторам',
+          error: 'Не удалось отправить заказ администраторам',
         },
         { status: 502 }
       );
     }
 
-    console.log(
-      `[order] Заказ успешно отправлен ${results.length} администраторам`
-    );
+    if (failed.length > 0) {
+      console.error('[order] Заказ отправлен не всем администраторам:', failed);
+    }
 
-    return NextResponse.json({ ok: true });
+    console.log(`[order] Заказ успешно отправлен ${sent.length} администраторам`);
+
+    return NextResponse.json({ ok: true, partial: failed.length > 0 });
 
   } catch (err) {
     console.error('[order] fatal:', err);
