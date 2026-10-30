@@ -171,6 +171,13 @@ export const pizzaMenu = [
       { size: 40, label: 'Мега (40 см)', price: 145000 },
     ],
   },
+  {
+    id: 115,
+    category: 'Пиццы',
+    name: 'Гигант',
+    image: '',
+    variants: [{ label: 'Гигант', price: 350000 }],
+  },
 
   // ====================== КФС ======================
   {
@@ -268,7 +275,7 @@ export const pizzaMenu = [
     category: 'Акции',
     name: 'Акция: 3 пиццы 25 см',
     composition: 'Сырная, Пепперони и Маргарита (каждая 25 см)',
-    image: '/images/fast-food/101.PNG',
+    image: '/images/fast-food/offer-three-pizzas.jpg',
     variants: [{ label: '3 пиццы · 25 см', price: 110000 }],
   },
 
@@ -494,7 +501,7 @@ export const pizzaMenu = [
     category: 'Добавки',
     name: 'Котлета',
     composition: 'Мясная котлета',
-    image: '/images/fast-food/722.PNG',
+    image: '/images/fast-food/kotleta.jpg',
     variants: [{ price: 15000 }],
   },
   {
