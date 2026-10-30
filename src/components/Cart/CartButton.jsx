@@ -6,24 +6,29 @@ import { getCart } from '@/lib/cart';
 import CartSidebar from './CartSidebar';
 import './CartButton.css';
 
+const readCartSummary = () => {
+  const cart = getCart();
+  return {
+    cartCount: cart.reduce((s, i) => s + i.qty, 0),
+    total: cart.reduce((s, i) => s + i.qty * i.price, 0),
+  };
+};
+
 export default function CartButton() {
-  const [cartCount, setCartCount] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [{ cartCount, total }, setCartSummary] = useState(() => readCartSummary());
   const [open, setOpen] = useState(false);
 
   const refresh = () => {
-    const cart = getCart();
-    setCartCount(cart.reduce((s, i) => s + i.qty, 0));
-    setTotal(cart.reduce((s, i) => s + i.qty * i.price, 0));
+    setCartSummary(readCartSummary());
   };
 
   useEffect(() => {
-    refresh();
-    window.addEventListener('cartUpdated', refresh);
-    window.addEventListener('storage', refresh);
+    const onCartUpdate = () => refresh();
+    window.addEventListener('cartUpdated', onCartUpdate);
+    window.addEventListener('storage', onCartUpdate);
     return () => {
-      window.removeEventListener('cartUpdated', refresh);
-      window.removeEventListener('storage', refresh);
+      window.removeEventListener('cartUpdated', onCartUpdate);
+      window.removeEventListener('storage', onCartUpdate);
     };
   }, []);
 
@@ -44,7 +49,7 @@ export default function CartButton() {
           <span className="floating-cart-label">Корзина</span>
         )}
       </button>
-      <CartSidebar open={open} onClose={() => setOpen(false)} />
+      {open && <CartSidebar key={open ? 'cart-open' : 'cart-closed'} open={open} onClose={() => setOpen(false)} />}
     </>
   );
 }

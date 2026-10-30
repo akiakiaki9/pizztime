@@ -10,15 +10,11 @@ import './CartSidebar.css';
 const PLACEHOLDER = '/images/placeholder.png';
 
 export default function CartSidebar({ open, onClose }) {
-    const [cart, setCart] = useState([]);
+    const [cart, setCart] = useState(() => getCart());
     const [checkoutOpen, setCheckoutOpen] = useState(false);
     const [brokenImages, setBrokenImages] = useState({});
 
     const refresh = () => setCart(getCart());
-
-    useEffect(() => {
-        if (open) refresh();
-    }, [open]);
 
     useEffect(() => {
         const onUpdate = () => refresh();

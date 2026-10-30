@@ -1,7 +1,6 @@
 // src/components/Footer/Footer.jsx
 'use client';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import {
   FaInstagram,
   FaTelegram,
@@ -12,13 +11,6 @@ import {
 import './Footer.css';
 
 export default function Footer() {
-  // Год вычисляем на клиенте после монтирования,
-  // чтобы избежать ошибки "unstable value new Date()" при SSG
-  const [year, setYear] = useState('');
-
-  useEffect(() => {
-    setYear(new Date().getFullYear());
-  }, []);
 
   return (
     <footer className="footer">
@@ -91,7 +83,7 @@ export default function Footer() {
 
       {/* ====== Нижняя панель ====== */}
       <div className="container footer-bottom">
-        <span>{year ? `© ${year} Pizza Time Bukhara. Все права защищены.` : '© Pizza Time Bukhara'}</span>
+        <span>© Pizza Time Bukhara. Все права защищены.</span>
         <span className="footer-dev">
           Разработал{' '}
           <a href="https://www.akbarsoft.uz" target="_blank" rel="noreferrer">

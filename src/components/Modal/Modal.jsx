@@ -7,19 +7,14 @@ import './Modal.css';
 
 const PLACEHOLDER = '/images/placeholder.png';
 
-export default function Modal({ item, onClose, onAdd }) {
+function ModalContent({ item, onClose, onAdd }) {
   const [variantIndex, setVariantIndex] = useState(0);
   const [imgError, setImgError] = useState(false);
 
   useEffect(() => {
-    if (!item) return;
-    setVariantIndex(0);
-    setImgError(false);
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = ''; };
-  }, [item]);
-
-  if (!item) return null;
+  }, []);
 
   const hasVariants = Array.isArray(item.variants) && item.variants.length > 0;
   const variant = hasVariants ? item.variants[variantIndex] : null;
@@ -37,9 +32,9 @@ export default function Modal({ item, onClose, onAdd }) {
 
   const handleAdd = () => {
     if (!priceAvailable) return;
-    
+
     const label = getVariantLabel(variant);
-    
+
     onAdd({
       id: `${item.source}-${item.id}-${variant.size ?? 'x'}-${variant.pieces ?? 'x'}-${variant.grams ?? 'x'}-${variant.label ?? 'x'}`,
       productId: item.id,
@@ -115,4 +110,10 @@ export default function Modal({ item, onClose, onAdd }) {
       </div>
     </div>
   );
+}
+
+export default function Modal({ item, onClose, onAdd }) {
+  if (!item) return null;
+
+  return <ModalContent key={`${item.source}-${item.id}`} item={item} onClose={onClose} onAdd={onAdd} />;
 }

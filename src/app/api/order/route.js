@@ -1,7 +1,7 @@
-// src/app/api/order/route.js
+
 import { NextResponse } from 'next/server';
 
-// Экранируем HTML-спецсимволы, чтобы Telegram не ругался на <, >, &
+// Экранирование HTML-спецсимволов
 const esc = (s) =>
   String(s ?? '')
     .replace(/&/g, '&amp;')
@@ -12,10 +12,14 @@ export async function POST(req) {
   try {
     const { items, total, customer, coords } = await req.json();
 
-    // ===== Валидация =====
+    // ===== ВАЛИДАЦИЯ =====
     if (!Array.isArray(items) || items.length === 0) {
-      return NextResponse.json({ ok: false, error: 'Корзина пуста' }, { status: 400 });
+      return NextResponse.json(
+        { ok: false, error: 'Корзина пуста' },
+        { status: 400 }
+      );
     }
+
     if (!customer?.name || !customer?.phone) {
       return NextResponse.json(
         { ok: false, error: 'Не хватает данных клиента' },
@@ -23,33 +27,52 @@ export async function POST(req) {
       );
     }
 
+    // ===== TELEGRAM НАСТРОЙКИ =====
     const token = process.env.TG_TOKEN;
-    const chatId = process.env.TG_CHAT_ID;
-    if (!token || !chatId) {
-      console.error('[order] TG_TOKEN или TG_CHAT_ID не заданы');
+
+    // Получаем все ID администраторов из TG_CHAT_IDS
+    const chatIds = (process.env.TG_CHAT_IDS || '')
+      .split(',')
+      .map((id) => id.trim())
+      .filter(Boolean);
+
+    if (!token || chatIds.length === 0) {
+      console.error('[order] TG_TOKEN или TG_CHAT_IDS не заданы');
+
       return NextResponse.json(
         { ok: false, error: 'Сервер не настроен' },
         { status: 500 }
       );
     }
 
-    // ===== Состав заказа =====
+    // ===== СОСТАВ ЗАКАЗА =====
     const lines = items
-      .map(
-        (i) =>
-          `• ${esc(i.name)} × ${i.qty} — ${(i.price * i.qty).toLocaleString('ru-RU')} сум`
-      )
+      .map((i) => {
+        const qty = Number(i.qty);
+        const price = Number(i.price);
+
+        return `• ${esc(i.name)} × ${qty} — ${(price * qty).toLocaleString('ru-RU')} сум`;
+      })
       .join('\n');
 
-    // ===== Маршрут =====
+    // ===== МАРШРУТ =====
     let routeBlock = '';
     let inlineKeyboard = null;
 
-    if (coords?.lat && coords?.lng) {
+    if (
+      coords?.lat != null &&
+      coords?.lng != null &&
+      Number.isFinite(Number(coords.lat)) &&
+      Number.isFinite(Number(coords.lng))
+    ) {
       const lat = Number(coords.lat).toFixed(6);
       const lng = Number(coords.lng).toFixed(6);
-      const yandexRoute = `https://yandex.uz/maps/?rtext=~${lat},${lng}&rtt=auto`;
-      const googleRoute = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
+
+      const yandexRoute =
+        `https://yandex.uz/maps/?rtext=~${lat},${lng}&rtt=auto`;
+
+      const googleRoute =
+        `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
 
       routeBlock = [
         '',
@@ -67,7 +90,7 @@ export async function POST(req) {
       };
     }
 
-    // ===== Текст сообщения =====
+    // ===== ТЕКСТ ЗАКАЗА =====
     const text = [
       '🍕 <b>Новый заказ Pizza Time</b>',
       '',
@@ -83,40 +106,77 @@ export async function POST(req) {
       '',
       `💰 <b>Итого: ${Number(total).toLocaleString('ru-RU')} сум</b>`,
       '',
-      `🕐 ${new Date().toLocaleString('ru-RU', { timeZone: 'Asia/Tashkent' })}`,
+      `🕐 ${new Date().toLocaleString('ru-RU', {
+        timeZone: 'Asia/Tashkent',
+      })}`,
     ]
       .filter(Boolean)
       .join('\n');
 
-    // ===== Отправка в Telegram =====
-    const tgRes = await fetch(
-      `https://api.telegram.org/bot${token}/sendMessage`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text,
-          parse_mode: 'HTML',
-          disable_web_page_preview: true,
-          ...(inlineKeyboard && { reply_markup: inlineKeyboard }),
-        }),
-      }
+    // ===== ОТПРАВКА ВСЕМ АДМИНИСТРАТОРАМ =====
+    const results = await Promise.all(
+      chatIds.map(async (chatId) => {
+        try {
+          const tgRes = await fetch(
+            `https://api.telegram.org/bot${token}/sendMessage`,
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                chat_id: chatId,
+                text,
+                parse_mode: 'HTML',
+                disable_web_page_preview: true,
+                ...(inlineKeyboard && {
+                  reply_markup: inlineKeyboard,
+                }),
+              }),
+            }
+          );
+
+          const tgData = await tgRes.json();
+
+          return {
+            chatId,
+            ok: tgRes.ok && tgData.ok,
+            error: tgData.description || null,
+          };
+        } catch (error) {
+          return {
+            chatId,
+            ok: false,
+            error: error.message,
+          };
+        }
+      })
     );
 
-    const tgData = await tgRes.json();
+    // ===== ПРОВЕРКА РЕЗУЛЬТАТОВ =====
+    const failed = results.filter((result) => !result.ok);
 
-    if (!tgRes.ok || !tgData.ok) {
-      console.error('[order] Telegram error:', tgData);
+    if (failed.length > 0) {
+      console.error('[order] Не удалось отправить всем администраторам:', failed);
+
       return NextResponse.json(
-        { ok: false, error: 'Не удалось отправить в Telegram' },
+        {
+          ok: false,
+          error: 'Не удалось отправить заказ всем администраторам',
+        },
         { status: 502 }
       );
     }
 
+    console.log(
+      `[order] Заказ успешно отправлен ${results.length} администраторам`
+    );
+
     return NextResponse.json({ ok: true });
+
   } catch (err) {
     console.error('[order] fatal:', err);
+
     return NextResponse.json(
       { ok: false, error: 'Ошибка сервера' },
       { status: 500 }
